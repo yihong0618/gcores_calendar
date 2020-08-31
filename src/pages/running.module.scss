@@ -1,0 +1,102 @@
+
+$global-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+"Helvetica Neue", Helvetica, Arial, sans-serif;
+
+$breakpoint-mobile: 960px;
+$breakpoint-stack: 530px;
+
+
+$gcores: rgb(244, 67, 54);
+$light: rgb(204, 204, 204);
+$dark: rgb(26, 26, 26);
+
+.body {
+  background-color: $light;
+  color: $gcores;
+  p,
+  h1,
+  h3,
+  h4,
+  li {
+    color: $gcores;
+  }
+}
+
+.audioTable {
+  width: 100%;
+  min-width: 700px;
+
+  margin: 2rem 0 5rem 0;
+
+  thead {
+    color: $dark;
+    text-align: right;
+
+    th {
+      padding: 0.5rem;
+    }
+  }
+}
+
+
+.audioSVG {
+  height: 250%;
+  // width: 100%;
+  width: 100%;
+  min-width: 700px;
+  margin: 1rem 0 0;
+}
+
+.audioRow {
+  td {
+    padding: 0.5rem;
+    border: 0;
+    text-align: right;
+
+    &:first-child {
+      text-align: left;
+    }
+  }
+
+  &:hover {
+    background-color: lighten($light, 3%);
+  }
+}
+
+.tableContainer {
+  width: 100%;
+  overflow-x: scroll;
+}
+
+.runDate {
+  color: $dark;
+}
+
+.buttons {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.button {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  width: 10%;
+  padding: 10px;
+  margin-top: 1px;
+  font-size: 10px;
+  text-align: center;
+  color: write;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+.runTitle {
+  height: 26px;
+  width: 710px;
+  position: absolute;
+  bottom: 0px;
+  left: 120px;
+  font-family: sans-serif;
+  cursor: pointer;
+}
