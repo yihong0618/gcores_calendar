@@ -1,13 +1,13 @@
 from generator import Generator
 import json
 
-
+AVATAR_PATH = "src/images/"
 JSON_FILE = "src/static/audios.js"
 SQL_FILE = "scripts/data.db"
 
 
 def run():
-    g = Generator(SQL_FILE)
+    g = Generator(SQL_FILE, AVATAR_PATH)
     g.sync(True)
 
     audios_list = g.load()

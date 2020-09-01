@@ -7,10 +7,9 @@ import Layout from '../components/layout';
 import { activities } from '../static/audios';
 import { chinaGeojson } from '../static/run_countries';
 import GitHubSvg from '../../assets/github.svg';
-import GridSvg from '../../assets/grid.svg';
 import { filterAndSortAudios,  sortDateFunc,  sortDateFuncReverse } from '../utils/utils';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import styles from './running.module.scss';
+import styles from './gcores.module.scss';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoieWlob25nMDYxOCIsImEiOiJja2J3M28xbG4wYzl0MzJxZm0ya2Fua2p2In0.PNKfkeQwYuyGOTT_x9BJ4Q';
 
@@ -20,10 +19,10 @@ let yearsArr = [];
 
 // generate base attr
 ((items) => {
-  const locationsList = [];
   items.forEach(
     (item) => {
       const y = item.created_at.slice(0, 4);
+      // ignore the first 
       if ( +y > 2000) {
         yearsArr.push(y);
       }
@@ -140,6 +139,7 @@ export default () => {
               <AudiosMap 
                 audios={audios}
                 year={year}
+                title={title}
                 changeYear={changeYear}
               />
             )}
@@ -332,11 +332,11 @@ const RunMap = ({
   );
 };
 
-const AudiosMap = ({changeYear}) => {
+const AudiosMap = ({changeYear, title}) => {
   return (
   <div>
     <RunMapButtons changeYear={changeYear}/>
-    <h1>dasdsadsa</h1>
+  <h1>{title}</h1>
   </div>
   )
 }

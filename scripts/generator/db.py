@@ -65,7 +65,6 @@ class Category(Base):
 
 def get_djs(relationships_data):
     djs_users = relationships_data["djs"].get("data")
-    print(djs_users)
     if not djs_users:
         return []
     return [i["id"] for i in djs_users]
@@ -87,6 +86,7 @@ def update_or_create_audio(session, audio_data):
     except:
         return
     audio = session.query(Audio).filter_by(audio_id=audio_id).first()
+    djs = get_djs(relationships_data)
 
     if not audio:
         audio = Audio(
@@ -98,23 +98,19 @@ def update_or_create_audio(session, audio_data):
             likes_count=attributes["likes-count"],
             bookmarks_count=attributes["bookmarks-count"],
             comments_count=attributes["comments-count"],
-            djs=str(get_djs(relationships_data)),
+            djs=str(djs),
             category_id=get_category_id(relationships_data),
             thumb=attributes["thumb"],
             is_free=attributes["is-free"],
         )
-        created = True
+        created = True 
     else:
         audio.likes_count = attributes["likes-count"]
         audio.comments_count = attributes["comments-count"]
         audio.bookmarks_count = attributes["bookmarks-count"]
 
     session.add(audio)
-    return created
-
-
-def add_to_djs(user_id, djs_data):
-    pass
+    return created, djs
 
 
 def add_to_category(user_id, djs_data):
