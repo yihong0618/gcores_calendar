@@ -4,7 +4,10 @@ const sortDateFunc = (a, b) => new Date(b) - new Date(a);
 const sortDateFuncReverse = (a, b) => new Date(a) - new Date(b);
 
 const filterAndSortAudios = (activities, year, sortFunc) => {
-  const s = activities.filter((audio) => filterYearAudios(audio, year));
+  let s = activities;
+  if (year !== 'Total') {
+    const s = activities.filter((audio) => filterYearAudios(audio, year));
+  }
   return s.sort(sortFunc);
 };
 

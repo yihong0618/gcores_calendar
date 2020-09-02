@@ -1,43 +1,97 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import MapboxLanguage from '@mapbox/mapbox-gl-language';
-import ReactMapGL, { Source, Layer } from 'react-map-gl';
+import ReactMapGL, { Source, Layer, InteractiveMap } from 'react-map-gl';
 
+import { Link, StaticQuery, graphql } from 'gatsby';
 import Layout from '../components/layout';
 import { activities } from '../static/audios';
 import { chinaGeojson } from '../static/run_countries';
 import GitHubSvg from '../../assets/github.svg';
-import { filterAndSortAudios,  sortDateFunc,  sortDateFuncReverse } from '../utils/utils';
+import { filterAndSortAudios, sortDateFunc, sortDateFuncReverse } from '../utils/utils';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import styles from './gcores.module.scss';
+import styles from './gocres.module.scss';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoieWlob25nMDYxOCIsImEiOiJja2J3M28xbG4wYzl0MzJxZm0ya2Fua2p2In0.PNKfkeQwYuyGOTT_x9BJ4Q';
 
+
+const ImgFiles = ({data, djs}) => {
+      let avatars = data.avatars.edges;
+      
+      // let save = avatars.sort((a, b) => {
+      //   (a.node.image.originalName - b.node.image.originalName)
+      // })
+      console.log(djs)
+      avatars = avatars.filter((a) => djs.includes(a.node.image.originalName.split(".")[0]))
+      avatars = avatars.sort((a, b) => (+ a.node.image.originalName.split(".")[0]) - (+ b.node.image.originalName.split(".")[0]))
+      return (
+        <>
+          {avatars.map((edge) => (
+            <picture title={"dada"} onClick={()=> console.log(222)}>
+              <source
+                srcSet={edge.node.image.srcSet}
+                type="image/jpeg"
+              />
+              <source
+                srcSet={edge.node.image.srcSetWebp}
+                type="image/webp"
+              />
+              <img
+                className="dib w2 h2 br-100"
+                alt={122}
+                src={edge.node.image.base64}
+              />
+            </picture>
+          ))}
+        </>
+      );
+};
+
 // const
 let yearsArr = [];
-
+const yearDJSMap = new Map();
 
 // generate base attr
 ((items) => {
+  let yearDJS = {}
   items.forEach(
     (item) => {
       const y = item.created_at.slice(0, 4);
-      // ignore the first 
-      if ( +y > 2000) {
+      // ignore the first
+      if (+y > 2000) {
         yearsArr.push(y);
+        const djsArr = eval(item.djs)
+        if (yearDJS[y] === undefined) {
+          yearDJS[y] = djsArr
+        } else {
+          yearDJS[y].push(...djsArr)
+        }
       }
-    },
+    }
   );
   yearsArr = [...new Set(yearsArr)].sort().reverse();
+  const yearDjsArr = Object.entries(yearDJS);
+  let totalArr = [];
+  yearDjsArr.forEach((djs) => {
+    const yearDjsSet = new Set(djs[1])
+    yearDJSMap.set(djs[0], [...yearDjsSet])
+    totalArr.push(...yearDjsSet);
+  })
+  yearDJSMap.set("Total", [...new Set(totalArr)])
 })(activities);
 
+let thisYear = '';
+if (yearsArr) {
+  [thisYear] = yearsArr;
+}
 
 // Page
-export default () => {
+export default ({ data }) => {
   const onStartPoint = [38.862, 121.514];
-  const [year, setYear] = useState('2020');
+  const [year, setYear] = useState(thisYear);
   const [audios, setActivity] = useState(filterAndSortAudios(activities, year, sortDateFunc));
   const [title, setTitle] = useState('');
+  const [djs, setDjs] = useState(yearDJSMap.get(thisYear));
   const [viewport, setViewport] = useState({
     width: '100%',
     height: 400,
@@ -47,21 +101,9 @@ export default () => {
   });
   const changeYear = (year) => {
     setYear(year);
+    setDjs(yearDJSMap.get(year))
     scrollToMap();
-    if (year !== 'Total') {
-      setActivity(filterAndSortAudios(activities, year, sortDateFunc));
-    } else {
-      setActivity(activities);
-    }
-    if (viewport.zoom > 3) {
-      setViewport({
-        width: '100%',
-        height: 400,
-        latitude: onStartPoint[0],
-        longitude: onStartPoint[1],
-        zoom: 11.5,
-      });
-    }
+    setActivity(filterAndSortAudios(activities, year, sortDateFunc));
     setTitle(`${year} Audios DJS map`);
   };
 
@@ -69,51 +111,51 @@ export default () => {
     scrollToMap();
     setTitle(titleForShow(audio));
   };
-  
+
   // TODO refactor
   useEffect(() => {
-    let rectArr = document.querySelectorAll("rect");
+
+    let rectArr = document.querySelectorAll('rect');
     if (rectArr.length !== 0) {
-      rectArr = Array.from(rectArr).slice(1)
+      rectArr = Array.from(rectArr).slice(1);
     }
 
     rectArr.forEach((rect) => {
-      const rectColor = rect.getAttribute("fill");
+      const rectColor = rect.getAttribute('fill');
       // not run has no click event
-      if (rectColor !== "#444444") {
+      if (rectColor !== '#444444') {
         const audioDate = rect.innerHTML;
-        const [audioName] = audioDate.match(/\d{4}-\d{1,2}-\d{1,2}/) || ["2021"]
-        let audio = audios.filter(
-          (r) => r.created_at.slice(0, 10) === audioName
-        ).sort((a, b) => b.distance - a.distance)
-        
+        const [audioName] = audioDate.match(/\d{4}-\d{1,2}-\d{1,2}/) || ['2021'];
+        const audio = audios.filter(
+          (r) => r.created_at.slice(0, 10) === audioName,
+        ).sort((a, b) => b.distance - a.distance);
+
         // do not add the event next time
         // maybe a better way?
         if (audio) {
           rect.onclick = () => console.log(1);
         }
       }
-    })
+    });
 
-    let polylineArr = document.querySelectorAll("polyline");
+    let polylineArr = document.querySelectorAll('polyline');
     if (polylineArr.length !== 0) {
-      polylineArr = Array.from(polylineArr).slice(1)
+      polylineArr = Array.from(polylineArr).slice(1);
     }
     polylineArr.forEach((polyline) => {
       // not run has no click event
-        const audioDate = polyline.innerHTML;
-        const [audioName] = audioDate.match(/\d{4}-\d{1,2}-\d{1,2}/) || ["2021"]
-        let audio = audios.filter(
-          (r) => r.created_at.slice(0, 10) === audioName
-        ).sort((a, b) => b.distance - a.distance)[0]
-        
-        // do not add the event next time
-        // maybe a better way?
-        if (audio) {
-          polyline.onclick = () => console.log(2);
-        }
+      const audioDate = polyline.innerHTML;
+      const [audioName] = audioDate.match(/\d{4}-\d{1,2}-\d{1,2}/) || ['2021'];
+      const audio = audios.filter(
+        (r) => r.created_at.slice(0, 10) === audioName,
+      ).sort((a, b) => b.distance - a.distance)[0];
+
+      // do not add the event next time
+      // maybe a better way?
+      if (audio) {
+        polyline.onclick = () => console.log(2);
       }
-    )
+    });
   }, [year]);
 
   return (
@@ -126,23 +168,14 @@ export default () => {
           </div>
           {viewport.zoom <= 3 ? <LocationStat audios={audios} location="a" onClick={changeYear} /> : <YearsStat audios={activities} year={year} onClick={changeYear} />}
           <div className="fl w-100 w-70-l">
-            {audios.length === 1 ? (
-              <RunMapWithViewport
-                audios={audios}
-                year={year}
-                title={title}
-                viewport={viewport}
-                setViewport={setViewport}
-                changeYear={changeYear}
-              />
-            ) : (
-              <AudiosMap 
+              <AudiosMap
+                data={data}
                 audios={audios}
                 year={year}
                 title={title}
                 changeYear={changeYear}
+                djs={djs}
               />
-            )}
             {year == 'Total' ? <SVGStat />
               : (
                 <AudioTable
@@ -158,16 +191,12 @@ export default () => {
   );
 };
 
-
 // Child components
-const SVGStat = () => {
-  return (
-    <div>
-      <GitHubSvg className={styles.audioSVG} />
-      <GridSvg className={styles.audioSVG} />
-    </div>
-  )
-};
+const SVGStat = () => (
+  <div>
+    <GitHubSvg className={styles.audioSVG} />
+  </div>
+);
 
 const YearsStat = ({ audios, year, onClick }) => {
   // make sure the year click on front
@@ -180,7 +209,11 @@ const YearsStat = ({ audios, year, onClick }) => {
     <div className="fl w-100 w-30-l pb5 pr5-l">
       <section className="pb4" style={{ paddingBottom: '0rem' }}>
         <p>
-          机核{yearsArr.length}年了，{yearsArr.length}年不容易祝机核越来越好，下面是
+          机核
+          {yearsArr.length}
+          年了，
+          {yearsArr.length}
+          年不容易祝机核越来越好，下面是
           {year}
           的电台数据
           <br />
@@ -218,7 +251,7 @@ const YearStat = ({ audios, year, onClick }) => {
   let sumBookmarks = 0;
   let sumComments = 0;
   let sumDuration = 0;
-  let djsSet = new Set();
+  const djsSet = new Set();
   audios.forEach((audio) => {
     if (audio.likes_count) {
       sumLikes += audio.likes_count || 0;
@@ -233,7 +266,7 @@ const YearStat = ({ audios, year, onClick }) => {
       const djs = eval(audio.djs);
       djs.forEach((d) => {
         djsSet.add(d);
-      })
+      });
     }
     if (audio.duration) {
       sumDuration += audio.duration || 0;
@@ -263,25 +296,22 @@ const LocationSummary = () => (
   </div>
 );
 
-const CitiesStat = () => {
-  return (
-    <div style={{ cursor: 'pointer' }}>
-      <section>
-      </section>
-      <hr color="red" />
-    </div>
-  );
-};
+const CitiesStat = () => (
+  <div style={{ cursor: 'pointer' }}>
+    <section />
+    <hr color="red" />
+  </div>
+);
 
 const RunMap = ({
   audios, year, title, viewport, setViewport, changeYear,
 }) => {
   year = year || '2020';
-  let geoData = geoJsonForaudios(audios, year);
+  const geoData = geoJsonForaudios(audios, year);
 
   const addControlHandler = (event) => {
     const map = event && event.target;
-    // set lauguage to Chinese if you use English please comment it 
+    // set lauguage to Chinese if you use English please comment it
     if (map) {
       map.addControl(
         new MapboxLanguage({
@@ -311,7 +341,7 @@ const RunMap = ({
           type="line"
           paint={{
             'line-color': 'rgb(224,237,94)',
-            'line-width':  2,
+            'line-width': 2,
           }}
           layout={{
             'line-join': 'round',
@@ -324,7 +354,7 @@ const RunMap = ({
           paint={{
             'fill-color': '#47b8e0',
           }}
-          filter={""}
+          filter=""
         />
       </Source>
       <span className={styles.runTitle}>{title}</span>
@@ -332,22 +362,21 @@ const RunMap = ({
   );
 };
 
-const AudiosMap = ({changeYear, title}) => {
-  return (
+const AudiosMap = ({ data, changeYear, title, djs}) => (
   <div>
-    <RunMapButtons changeYear={changeYear}/>
-  <h1>{title}</h1>
+    <RunMapButtons changeYear={changeYear} />
+    <ImgFiles data={data} djs={djs} />
+    <h1>{title}</h1>
   </div>
-  )
-}
+);
 
 const RunMapWithViewport = (props) => (
-    <RunMap {...props} />
+  <RunMap {...props} />
 );
 
 const RunMapButtons = ({ changeYear }) => {
   const yearsButtons = yearsArr.slice();
-  yearsButtons.push("Total")
+  yearsButtons.push('Total');
   const [index, setIndex] = useState(0);
   const handleClick = (e, year) => {
     const elementIndex = yearsButtons.indexOf(year);
@@ -487,9 +516,7 @@ const geoJsonForaudios = (audios, year) => {
 
 const geoJsonForMap = () => chinaGeojson;
 
-const titleForShow = (audio) => {
-  return audio.title
-};
+const titleForShow = (audio) => audio.title;
 
 // for scroll to the map
 const scrollToMap = () => {
@@ -497,3 +524,23 @@ const scrollToMap = () => {
   const rect = el.getBoundingClientRect();
   window.scroll(rect.left + window.scrollX, rect.top + window.scrollY);
 };
+
+export const query = graphql`
+  query AvatarsQuery {
+      avatars: allImageSharp
+      {
+        edges {
+          node {
+            id
+            image: fluid(srcSetBreakpoints: [32, 64, 96], quality: 100) {
+              originalName
+              src
+              srcSet
+              srcSetWebp
+              base64
+          }
+        }
+      }
+    }
+  }
+`
