@@ -8,7 +8,7 @@ SQL_FILE = "scripts/data.db"
 
 def run():
     g = Generator(SQL_FILE, AVATAR_PATH)
-    g.sync(True)
+    g.sync(False)
 
     audios_list = g.load()
     with open(JSON_FILE, "w") as f:

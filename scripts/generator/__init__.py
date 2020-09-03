@@ -43,7 +43,7 @@ class Generator:
         if force:
             audios_data = self.get_all_audios_data()
         else:
-            audios_data = self.get_audios_data(0)["data"]
+            audios_data = self.get_audios_data(0, 100, True)["data"]
 
         for audio_data in audios_data:
             created, djs = update_or_create_audio(self.session, audio_data)
@@ -69,9 +69,8 @@ class Generator:
         return audios_list
 
     def _add_djs(self):
-        djs = Djs
         djs_ids = self.session.query(Djs.user_id).all()
-        djs_ids = set([i[0] for i in djs_ids])
+        djs_ids = set([str(i[0]) for i in djs_ids])
         new_djs_ids = self.djs_set - djs_ids
         if not self.djs_set:
             return

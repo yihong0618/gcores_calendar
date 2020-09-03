@@ -81,7 +81,7 @@ $dark: rgb(26, 26, 26);
   display: inline-block;
   position: relative;
   cursor: pointer;
-  width: 10%;
+  width: 8%;
   padding: 10px;
   margin-top: 1px;
   font-size: 10px;
@@ -98,5 +98,10 @@ $dark: rgb(26, 26, 26);
   bottom: 0px;
   left: 120px;
   font-family: sans-serif;
+  cursor: pointer;
+}
+
+.picture {
+  margin: 0.2rem 0.2rem;
   cursor: pointer;
 }

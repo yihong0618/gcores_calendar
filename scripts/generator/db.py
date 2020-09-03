@@ -41,6 +41,8 @@ class Audio(Base):
         for key in AUDIO_KEYS:
             attr = getattr(self, key)
             out[key] = attr
+            if key == "djs":
+                out[key] = eval(attr)
         return out
 
 
@@ -104,6 +106,7 @@ def update_or_create_audio(session, audio_data):
             is_free=attributes["is-free"],
         )
         created = True 
+        session.add(audio)
     else:
         audio.likes_count = attributes["likes-count"]
         audio.comments_count = attributes["comments-count"]
