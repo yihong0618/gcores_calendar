@@ -5,7 +5,9 @@ import { graphql } from 'gatsby';
 import Layout from '../components/layout';
 import { activities } from '../static/audios';
 import GitHubSvg from '../../assets/github.svg';
-import { filterAndSortAudios, sortDateFunc, secondsToHms, filterYear, filterDjs, sortDateFuncReverse } from '../utils/utils';
+import {
+  filterAndSortAudios, sortDateFunc, secondsToHms, filterYear, filterDjs, sortDateFuncReverse, scrollToMap, intComma,
+} from '../utils/utils';
 import styles from './gocres.module.scss';
 
 // const
@@ -29,7 +31,7 @@ const yearDurationMap = new Map();
         } else {
           yearDJS[y].push(...djsArr);
         }
-        yearDuration[y] = (yearDuration[y] === undefined ? item.duration : yearDuration[y] + item.duration)
+        yearDuration[y] = (yearDuration[y] === undefined ? item.duration : yearDuration[y] + item.duration);
       }
     },
   );
@@ -47,13 +49,12 @@ const yearDurationMap = new Map();
 
   // set year duration attr
   let totalDuration = 0;
-  const yearDurationArr = Object.entries(yearDuration)
+  const yearDurationArr = Object.entries(yearDuration);
   yearDurationArr.forEach((d) => {
     totalDuration += d[1];
-    yearDurationMap.set(d[0], secondsToHms(d[1]))
-  })
-  yearDurationMap.set('Total', secondsToHms(totalDuration))
-
+    yearDurationMap.set(d[0], secondsToHms(d[1]));
+  });
+  yearDurationMap.set('Total', secondsToHms(totalDuration));
 })(activities);
 
 let thisYear = '';
@@ -65,25 +66,25 @@ if (yearsArr) {
 export default ({ data }) => {
   const [year, setYear] = useState(thisYear);
   const [audios, setActivity] = useState(filterAndSortAudios(activities, filterYear, year, sortDateFunc));
-  const [audio, setAudio] = useState('')
+  const [audio, setAudio] = useState('');
   const [djs, setDjs] = useState(yearDJSMap.get(thisYear));
 
   const changeYear = (year) => {
     setYear(year);
     setDjs(yearDJSMap.get(year));
-    setAudio('')
+    setAudio('');
     scrollToMap();
     setActivity(filterAndSortAudios(activities, filterYear, year, sortDateFunc));
   };
 
   const locateActivity = (audio) => {
     scrollToMap();
-    setAudio(audio)
+    setAudio(audio);
   };
 
   const changeDjs = (djsName) => {
     setActivity(filterAndSortAudios(activities, filterDjs, djsName, sortDateFunc));
-  }
+  };
 
   useEffect(() => {
     let rectArr = document.querySelectorAll('rect');
@@ -127,11 +128,13 @@ export default ({ data }) => {
               changeYear={changeYear}
               djs={djs}
             />
-            {audio && <AudioInfo
+            {audio && (
+            <AudioInfo
               data={data}
               audio={audio}
-            />}
-            {year == 'Total' ? <SVGStat />
+            />
+            )}
+            {year === 'Total' ? <SVGStat />
               : (
                 <AudioTable
                   audios={audios}
@@ -147,16 +150,18 @@ export default ({ data }) => {
 };
 
 // Child components
-const ImgFiles = ({ data, djs, year, changeDjs }) => {
-  const size = year === "Total" ? 2 : 3
+const ImgFiles = ({
+  data, djs, year, changeDjs,
+}) => {
+  const size = year === 'Total' ? 2 : 3;
   let avatars = data.avatars.edges;
   avatars = avatars.filter((a) => djs.includes(a.node.image.originalName.split('.')[0]));
   avatars = avatars.sort((a, b) => (+a.node.image.originalName.split('.')[0]) - (+b.node.image.originalName.split('.')[0]));
-  
+
   const handleClick = (djsRootName) => {
-    const djsName = djsRootName.split(".")[0]
-    changeDjs(djsName)
-  } 
+    const djsName = djsRootName.split('.')[0];
+    changeDjs(djsName);
+  };
   return (
     <>
       {avatars.map((edge) => (
@@ -234,7 +239,7 @@ const YearStat = ({ audios, year, onClick }) => {
       sumComments += audio.comments_count || 0;
     }
     if (audio.djs) {
-      const djs = audio.djs;
+      const { djs } = audio;
       djs.forEach((d) => {
         djsSet.add(d);
       });
@@ -256,24 +261,30 @@ const YearStat = ({ audios, year, onClick }) => {
 };
 
 const AudiosMap = ({
-  data, changeDjs, changeYear, djs, year
+  data, changeDjs, changeYear, djs, year,
 }) => {
   const duration = yearDurationMap.get(year);
   return (
     <div>
       <RunMapButtons changeYear={changeYear} />
       <ImgFiles data={data} djs={djs} year={year} changeDjs={changeDjs} />
-      <h1>{year} 电台时长 {duration}</h1>
+      <h1>
+        {year}
+        {' '}
+        电台时长
+        {' '}
+        {duration}
+      </h1>
     </div>
-  )
-}
+  );
+};
 
-const AudioInfo = ({data, audio}) => (
+const AudioInfo = ({ data, audio }) => (
   <div>
     <h1>{audio.title}</h1>
     <ImgFiles data={data} djs={audio.djs} />
   </div>
-)
+);
 
 const RunMapButtons = ({ changeYear }) => {
   const yearsButtons = yearsArr.slice();
@@ -388,17 +399,6 @@ const Stat = ({
     <span className="f3 fw6 i">{description}</span>
   </div>
 );
-
-// Utilities
-const intComma = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-const titleForShow = (audio) => audio.title;
-
-// for scroll to the map
-const scrollToMap = () => {
-  const el = document.querySelector('.fl.w-100.w-70-l');
-  const rect = el.getBoundingClientRect();
-  window.scroll(rect.left + window.scrollX, rect.top + window.scrollY);
-};
 
 export const query = graphql`
   query AvatarsQuery {
