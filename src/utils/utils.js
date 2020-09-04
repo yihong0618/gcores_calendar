@@ -1,14 +1,19 @@
 const filterYearAudios = ((audio, year) => audio.created_at.slice(0, 4) === year);
 
-const sortDateFunc = (a, b) => new Date(b) - new Date(a);
-const sortDateFuncReverse = (a, b) => new Date(a) - new Date(b);
+const sortDateFunc = (a, b) => new Date(b.created_at) - new Date(a.created_at);
+const sortDateFuncReverse = (a, b) => new Date(a.created_at) - new Date(b.created_at);
 
 const filterYear = (activities, year) => {
   if (year === 'Total') {
     return activities;
   }
-  activities.filter((audio, year) => audio.created_at.slice(0, 4) === year);
-  return activities;
+  const s = [];
+  activities.forEach((audio) => {
+    if ( audio.created_at.slice(0, 4) === year) {
+      s.push(audio);
+    }
+  });
+  return s;
 };
 
 const filterDjs = (activities, djsName) => {

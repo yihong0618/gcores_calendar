@@ -25,7 +25,8 @@ const yearDurationMap = new Map();
       // ignore the first
       if (+y > 2000) {
         yearsArr.push(y);
-        const djsArr = item.djs;
+        // must copy !!!
+        const djsArr = item.djs.slice();
         if (yearDJS[y] === undefined) {
           yearDJS[y] = djsArr;
         } else {
@@ -66,49 +67,25 @@ if (yearsArr) {
 export default ({ data }) => {
   const [year, setYear] = useState(thisYear);
   const [audios, setActivity] = useState(filterAndSortAudios(activities, filterYear, year, sortDateFunc));
-  const [audio, setAudio] = useState('');
+  const [singleAudio, setSingleAudio] = useState('');
   const [djs, setDjs] = useState(yearDJSMap.get(thisYear));
-
   const changeYear = (year) => {
     setYear(year);
     setDjs(yearDJSMap.get(year));
-    setAudio('');
+    setSingleAudio('');
     scrollToMap();
     setActivity(filterAndSortAudios(activities, filterYear, year, sortDateFunc));
   };
 
   const locateActivity = (audio) => {
     scrollToMap();
-    setAudio(audio);
+    setSingleAudio(audio);
   };
 
   const changeDjs = (djsName) => {
-    setActivity(filterAndSortAudios(activities, filterDjs, djsName, sortDateFunc));
+    const temp = filterAndSortAudios(activities, filterYear, year, sortDateFunc)
+    setActivity(filterAndSortAudios(temp, filterDjs, djsName, sortDateFunc));
   };
-
-  useEffect(() => {
-    let rectArr = document.querySelectorAll('rect');
-    if (rectArr.length !== 0) {
-      rectArr = Array.from(rectArr).slice(1);
-    }
-    rectArr.forEach((rect) => {
-      const rectColor = rect.getAttribute('fill');
-      // not run has no click event
-      if (rectColor !== '#444444') {
-        const audioDate = rect.innerHTML;
-        const [audioName] = audioDate.match(/\d{4}-\d{1,2}-\d{1,2}/) || ['2021'];
-        const audio = audios.filter(
-          (r) => r.created_at.slice(0, 10) === audioName,
-        ).sort((a, b) => b.distance - a.distance);
-
-        // do not add the event next time
-        // maybe a better way?
-        if (audio) {
-          rect.onclick = () => console.log(1);
-        }
-      }
-    });
-  }, [year]);
 
   return (
     <>
@@ -128,10 +105,10 @@ export default ({ data }) => {
               changeYear={changeYear}
               djs={djs}
             />
-            {audio && (
+            {singleAudio && (
             <AudioInfo
               data={data}
-              audio={audio}
+              singleAudio={singleAudio}
             />
             )}
             {year === 'Total' ? <SVGStat />
@@ -139,7 +116,9 @@ export default ({ data }) => {
                 <AudioTable
                   audios={audios}
                   year={year}
+                  djs={djs}
                   locateActivity={locateActivity}
+                  setActivity={setActivity}
                 />
               )}
           </div>
@@ -153,7 +132,7 @@ export default ({ data }) => {
 const ImgFiles = ({
   data, djs, year, changeDjs,
 }) => {
-  const size = year === 'Total' ? 2 : 3;
+  const avatarSize = year === 'Total' ? 2 : 3;
   let avatars = data.avatars.edges;
   avatars = avatars.filter((a) => djs.includes(a.node.image.originalName.split('.')[0]));
   avatars = avatars.sort((a, b) => (+a.node.image.originalName.split('.')[0]) - (+b.node.image.originalName.split('.')[0]));
@@ -175,7 +154,7 @@ const ImgFiles = ({
             type="image/webp"
           />
           <img
-            className={`dib w${size} h${size} br-100`}
+            className={`dib w${avatarSize} h${avatarSize} br-100`}
             src={edge.node.image.base64}
           />
         </picture>
@@ -279,12 +258,14 @@ const AudiosMap = ({
   );
 };
 
-const AudioInfo = ({ data, audio }) => (
+const AudioInfo = ({ data, singleAudio }) => {
+  return (
   <div>
-    <h1>{audio.title}</h1>
-    <ImgFiles data={data} djs={audio.djs} />
+    <h1>{singleAudio.title}</h1>
+    <ImgFiles data={data} djs={singleAudio.djs.slice()} />
   </div>
-);
+  )
+};
 
 const RunMapButtons = ({ changeYear }) => {
   const yearsButtons = yearsArr.slice();
@@ -320,14 +301,30 @@ const RunMapButtons = ({ changeYear }) => {
   );
 };
 
-const AudioTable = ({ audios, year, locateActivity }) => {
-  const [audioIndex, setaudioIndex] = useState(-1);
-  if (!yearsArr.includes(year)) {
-    // When total show 2020
-    year = '2020';
-  }
-  audios = audios.filter((audio) => audio.created_at.slice(0, 4) === year);
-  audios.sort((a, b) => new Date(b.created_at.replace(' ', 'T')) - new Date(a.created_at.replace(' ', 'T')));
+const AudioTable = ({ audios, year, locateActivity, setActivity }) => {
+  const [audioIndex, setAudioIndex] = useState(-1);
+  const [sortFuncInfo, setSortFuncInfo] = useState('');
+
+  const sortLikesFunc = (a, b) => (sortFuncInfo === 'Likes' ? a.likes_count - b.likes_count : b.likes_count - a.likes_count);
+  const sortCommentsFunc = (a, b) => (sortFuncInfo === 'Comments' ? a.comments_count - b.comments_count : b.comments_count - a.comments_count);
+  const sortBookmarksFunc = (a, b) => (sortFuncInfo === 'Bookmarks' ? a.bookmarks_count - b.bookmarks_count : b.bookmarks_count - a.bookmarks_count);
+  const sortDateFuncClick = sortFuncInfo === 'Date' ? sortDateFunc : sortDateFuncReverse;
+  const sortFuncMap = new Map([
+    ['Likes', sortLikesFunc],
+    ['Comments', sortCommentsFunc],
+    ['Bookmarks', sortBookmarksFunc],
+    ['Date', sortDateFuncClick],
+  ]);
+  const handleClick = (e) => {
+    const funcName = e.target.innerHTML;
+    if (sortFuncInfo === funcName) {
+      setSortFuncInfo('');
+    } else {
+      setSortFuncInfo(funcName);
+    }
+    const f = sortFuncMap.get(e.target.innerHTML);
+    setActivity(filterAndSortAudios(audios, filterYear, year, f));
+  };
 
   return (
     <div className={styles.tableContainer}>
@@ -335,10 +332,9 @@ const AudioTable = ({ audios, year, locateActivity }) => {
         <thead>
           <tr>
             <th />
-            <th>Likes</th>
-            <th>Comments</th>
-            <th>Bookmarks</th>
-            <th>Date</th>
+            {Array.from(sortFuncMap.keys()).map((k) => (
+              <th onClick={(e) => handleClick(e)}>{k}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
@@ -349,7 +345,7 @@ const AudioTable = ({ audios, year, locateActivity }) => {
               key={audio.audio_id}
               locateActivity={locateActivity}
               audioIndex={audioIndex}
-              setaudioIndex={setaudioIndex}
+              setAudioIndex={setAudioIndex}
             />
           ))}
         </tbody>
@@ -359,7 +355,7 @@ const AudioTable = ({ audios, year, locateActivity }) => {
 };
 
 const AudioRow = ({
-  audios, audio, locateActivity, audioIndex, setaudioIndex,
+  audios, audio, locateActivity, audioIndex, setAudioIndex,
 }) => {
   // change click color
   const handleClick = (e, audios, audio) => {
@@ -370,16 +366,16 @@ const AudioRow = ({
     if (audioIndex !== -1) {
       elements[audioIndex].style.color = 'rgb(244, 67, 54)';
     }
-    setaudioIndex(elementIndex);
+    setAudioIndex(elementIndex);
+    locateActivity(audio);
   };
 
   return (
     <tr
       className={styles.audioRow}
-      key={audio.created_at}
+      key={audio.audio_id}
       onClick={(e) => {
         handleClick(e, audios, audio);
-        locateActivity(audio);
       }}
     >
       <td title={audio.title}>{audio.title.slice(0, 20)}</td>
