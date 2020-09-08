@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 
-import { graphql } from 'gatsby';
+import { Link, graphql } from 'gatsby';
 import Layout from '../components/layout';
 import { activities, djs } from '../static/audios';
 import GitHubSvg from '../../assets/github.svg';
@@ -11,7 +11,7 @@ import {
   sortCommentsFunc, sortCommentsFuncReverse, sortBookmarksFunc, sortBookmarksFuncReverse,
   getSortDjsByAttr, getSortDjsByAttrReverse
 } from '../utils/utils';
-import { audioAttrMap, audioRoot } from '../utils/const';
+import { audioAttrMap, audioRoot, djsRoot } from '../utils/const';
 import styles from './gocres.module.scss';
 
 // const
@@ -144,6 +144,7 @@ const ImgFiles = ({
   data, djs, year, changeDjs, smallSize
 }) => {
   const avatarSize = year === 'Total' || smallSize ? 2 : 3;
+  const url = year === 'Total' ? djsRoot : '#'
   const getDjsId = (s) => s.node.image.originalName.split('.')[0]
   let avatars = data.avatars.edges;
   avatars = avatars.filter((a) => djs.includes(getDjsId(a)));
@@ -156,6 +157,7 @@ const ImgFiles = ({
   return (
     <>
       {avatars.map((edge) => (
+        <Link to={url+getDjsId(edge)}>
         <picture title={djsObj[getDjsId(edge)]} onClick={() => handleClick(edge.node.image.originalName)} className={styles.picture}>
           <source
             srcSet={edge.node.image.srcSet}
@@ -170,6 +172,7 @@ const ImgFiles = ({
             src={edge.node.image.base64}
           />
         </picture>
+        </Link>
       ))}
     </>
   );

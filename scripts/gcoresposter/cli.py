@@ -13,8 +13,6 @@ AVATAR_PATH = "src/images/"
 SQL_FILE = "scripts/data.db"
 
 
-
-
 def main():
     g = Generator(SQL_FILE, AVATAR_PATH)
     p = poster.Poster()

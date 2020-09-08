@@ -6,6 +6,7 @@ const audioAttrMap = new Map([
     ['Date', 'created_at']
 ]);
 
-const audioRoot = "https://www.gcores.com/radios/"
+const audioRoot = "https://www.gcores.com/radios/";
+const djsRoot = "https://www.gcores.com/users/";
 
-export {audioAttrMap, audioRoot};
+export { audioAttrMap, audioRoot, djsRoot };
