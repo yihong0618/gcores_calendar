@@ -19,6 +19,13 @@ AUDIO_KEYS = [
     "is_free"
 ]
 
+DJS_KEYS = [
+    "user_id",
+    "nickname",
+    "created_at",
+    "intro"
+]
+
 
 class Audio(Base):
     __tablename__ = "audio"
@@ -54,6 +61,13 @@ class Djs(Base):
     created_at = Column(String)
     thumb = Column(String)
     intro = Column(String)
+
+    def to_dict(self):
+        out = {}
+        for key in DJS_KEYS:
+            attr = getattr(self, key)
+            out[key] = attr
+        return out
 
 
 class Category(Base):

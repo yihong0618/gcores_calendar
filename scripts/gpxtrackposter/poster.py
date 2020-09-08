@@ -12,7 +12,6 @@ import svgwrite
 from utils import format_float
 from value_range import ValueRange
 from xy import XY
-from year_range import YearRange
 
 
 class Poster:
@@ -37,25 +36,6 @@ class Poster:
         self.years = set()
         self.tracks_drawer = None
         self.trans = None
-        self.set_language(None)
-
-    def set_language(self, language):
-        if language:
-            try:
-                locale.setlocale(locale.LC_ALL, f"{language}.utf8")
-            except locale.Error as e:
-                print(f'Cannot set locale to "{language}": {e}')
-                language = None
-                pass
-
-        # Fall-back to NullTranslations, if the specified language translation cannot be found.
-        if language:
-            lang = gettext.translation(
-                "gpxposter", localedir="locale", languages=[language], fallback=True
-            )
-        else:
-            lang = gettext.NullTranslations()
-        self.trans = lang.gettext
 
     def set_tracks(self, tracks):
         """Associate the set of tracks with this poster.
@@ -68,7 +48,6 @@ class Poster:
         self.length_range = ValueRange()
         self.length_range_by_date = ValueRange()
         self.__compute_years(tracks)
-        print(self.years)
         for track in tracks:
             if int(track["created_at"][:4]) < 2000:
                 continue 
@@ -133,7 +112,7 @@ class Poster:
 
         d.add(
             d.text(
-                self.trans("ATHLETE"),
+                "",
                 insert=(10, self.height - 20),
                 fill=text_color,
                 style=header_style,
@@ -149,7 +128,7 @@ class Poster:
         )
         d.add(
             d.text(
-                self.trans("STATISTICS"),
+                "",
                 insert=(120, self.height - 20),
                 fill=text_color,
                 style=header_style,
@@ -157,7 +136,7 @@ class Poster:
         )
         d.add(
             d.text(
-                self.trans("Number") + f": {len(self.tracks)}",
+                "Audios" + f": {len(self.tracks)}",
                 insert=(120, self.height - 15),
                 fill=text_color,
                 style=small_value_style,
@@ -165,7 +144,7 @@ class Poster:
         )
         d.add(
             d.text(
-                self.trans("Weekly") + ": " + format_float(len(self.tracks) / weeks),
+                "Weekly" + ": " + format_float(len(self.tracks) / weeks),
                 insert=(120, self.height - 10),
                 fill=text_color,
                 style=small_value_style,
@@ -173,7 +152,7 @@ class Poster:
         )
         d.add(
             d.text(
-                self.trans("Total") + ": " + self.format_distance(total_length),
+                "Total" + ": " + self.format_distance(total_length),
                 insert=(141, self.height - 15),
                 fill=text_color,
                 style=small_value_style,
@@ -181,7 +160,7 @@ class Poster:
         )
         d.add(
             d.text(
-                self.trans("Avg") + ": " + self.format_distance(average_length),
+                "Avg" + ": " + self.format_distance(average_length),
                 insert=(141, self.height - 10),
                 fill=text_color,
                 style=small_value_style,
@@ -189,7 +168,7 @@ class Poster:
         )
         d.add(
             d.text(
-                self.trans("Min") + ": " + self.format_distance(min_length),
+                "Min" + ": " + self.format_distance(min_length),
                 insert=(167, self.height - 15),
                 fill=text_color,
                 style=small_value_style,
@@ -197,7 +176,7 @@ class Poster:
         )
         d.add(
             d.text(
-                self.trans("Max") + ": " + self.format_distance(max_length),
+                "Max" + ": " + self.format_distance(max_length),
                 insert=(167, self.height - 10),
                 fill=text_color,
                 style=small_value_style,

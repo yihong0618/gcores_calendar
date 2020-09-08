@@ -17,7 +17,6 @@ class GithubDrawer(TracksDrawer):
         super().__init__(the_poster)
 
     def draw(self, dr: svgwrite.Drawing, size: XY, offset: XY):
-        print(self.poster.tracks_by_date)
         if self.poster.tracks is None:
             raise PosterError("No tracks to draw")
         year_size = 200 * 4.0 / 80.0
@@ -34,7 +33,6 @@ class GithubDrawer(TracksDrawer):
                 -start_date_weekday
             )
             year_length = total_length_year_dict.get(year, 0)
-            year_length = utils.format_float(self.poster.m2u(year_length))
             month_names = [
                 locale.nl_langinfo(day)[:3]  # Get only first three letters
                 for day in [
@@ -52,9 +50,6 @@ class GithubDrawer(TracksDrawer):
                     locale.MON_12,
                 ]
             ]
-            km_or_mi = "mi"
-            if self.poster.units == "metric":
-                km_or_mi = "km"
             dr.add(
                 dr.text(
                     f"{year}",
@@ -67,7 +62,7 @@ class GithubDrawer(TracksDrawer):
 
             dr.add(
                 dr.text(
-                    f"{year_length} {km_or_mi}",
+                    f"{year_length} Likes",
                     insert=(offset.tuple()[0] + 165, offset.tuple()[1] + 2),
                     fill=self.poster.colors["text"],
                     alignment_baseline="hanging",
@@ -109,8 +104,8 @@ class GithubDrawer(TracksDrawer):
                             color = self.poster.colors.get(
                                 "special2"
                             ) or self.poster.colors.get("special")
-                        str_length = utils.format_float(self.poster.m2u(length))
-                        date_title = f"{date_title} {str_length} {km_or_mi}"
+                        str_length = str(length) 
+                        date_title = f"{date_title} {str_length} Likes"
 
                     rect = dr.rect((rect_x, rect_y), dom, fill=color)
                     rect.set_desc(title=date_title)

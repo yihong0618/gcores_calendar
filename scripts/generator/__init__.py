@@ -65,8 +65,13 @@ class Generator:
         audios_list = []
         for audio in audios:
             audios_list.append(audio.to_dict())
+        
+        djs = self.session.query(Djs).order_by(Djs.created_at)
+        djs_list = []
+        for d in djs:
+            djs_list.append(d.to_dict())
 
-        return audios_list
+        return audios_list, djs_list
 
     def _add_djs(self):
         djs_ids = self.session.query(Djs.user_id).all()

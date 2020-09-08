@@ -1,7 +1,28 @@
 const filterYearAudios = ((audio, year) => audio.created_at.slice(0, 4) === year);
 
+// sort funcs
 const sortDateFunc = (a, b) => new Date(b.created_at) - new Date(a.created_at);
-const sortDateFuncReverse = (a, b) => new Date(a.created_at) - new Date(b.created_at);
+const sortDateFuncReverse = (a, b) => sortDateFunc(b, a);
+const sortLikesFunc = (a, b) =>  b.likes_count - a.likes_count
+const sortLikesFuncReverse = (a, b) => sortLikesFunc(b, a)
+const sortCommentsFunc = (a, b) => b.comments_count - a.comments_count;
+const sortCommentsFuncReverse = (a, b) => sortCommentsFunc(b, a);
+const sortBookmarksFunc = (a, b) => b.bookmarks_count - a.bookmarks_count;
+const sortBookmarksFuncReverse = (a, b) => sortBookmarksFunc(b, a);
+
+
+const getSortDjsByAttr = (s, attr) => {
+  let djsAttr = {}
+  s.forEach((a) => {
+    const djs = a.djs;
+    const value = a[attr];
+    for (let d of djs) {
+      djsAttr[d] = djsAttr[d] === undefined ? value : djsAttr[d] + value
+    }
+  })
+  return Object.keys(djsAttr).sort((a, b) => djsAttr[b] - djsAttr[a])
+}
+const getSortDjsByAttrReverse = (s, attr) => getSortDjsByAttr(s, attr).reverse()
 
 const filterYear = (activities, year) => {
   if (year === 'Total') {
@@ -37,10 +58,10 @@ function secondsToHms(d) {
   const m = Math.floor(d % 3600 / 60);
   const s = Math.floor(d % 3600 % 60);
 
-  const hDisplay = h > 0 ? h + (h === 1 ? ' hour, ' : ' hours, ') : '';
-  const mDisplay = m > 0 ? m + (m === 1 ? ' minute, ' : ' minutes, ') : '';
-  const sDisplay = s > 0 ? s + (s === 1 ? ' second' : ' seconds') : '';
-  return hDisplay + mDisplay + sDisplay;
+  const hDisplay = h > 0 ? h + (h === 1 ? ' hour ' : ' hours ') : '';
+  const mDisplay = m > 0 ? m + (m === 1 ? ' minute ' : ' minutes ') : '';
+  const sDisplay = s > 0 ? s + (s === 1 ? ' second ' : ' seconds') : '';
+  return '(' + hDisplay + mDisplay + sDisplay + ')';
 }
 
 // Utilities
@@ -55,4 +76,6 @@ const scrollToMap = () => {
 
 export {
   filterAndSortAudios, filterYear, filterDjs, sortDateFunc, sortDateFuncReverse, secondsToHms, scrollToMap, intComma,
+  sortLikesFunc, sortLikesFuncReverse, sortCommentsFunc, sortCommentsFuncReverse, sortBookmarksFunc, sortBookmarksFuncReverse,
+  getSortDjsByAttr, getSortDjsByAttrReverse
 };

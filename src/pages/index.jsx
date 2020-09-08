@@ -3,11 +3,15 @@ import { Helmet } from 'react-helmet';
 
 import { graphql } from 'gatsby';
 import Layout from '../components/layout';
-import { activities } from '../static/audios';
+import { activities, djs } from '../static/audios';
 import GitHubSvg from '../../assets/github.svg';
 import {
-  filterAndSortAudios, sortDateFunc, secondsToHms, filterYear, filterDjs, sortDateFuncReverse, scrollToMap, intComma,
+  filterAndSortAudios, secondsToHms, filterYear, filterDjs, scrollToMap, intComma,
+  sortDateFunc, sortDateFuncReverse, sortLikesFunc, sortLikesFuncReverse,
+  sortCommentsFunc, sortCommentsFuncReverse, sortBookmarksFunc, sortBookmarksFuncReverse,
+  getSortDjsByAttr, getSortDjsByAttrReverse
 } from '../utils/utils';
+import { audioAttrMap, audioRoot } from '../utils/const';
 import styles from './gocres.module.scss';
 
 // const
@@ -63,6 +67,11 @@ if (yearsArr) {
   [thisYear] = yearsArr;
 }
 
+const djsObj = {}
+djs.forEach((d) => {
+  djsObj[d.user_id] = d.nickname
+})
+
 // Page
 export default ({ data }) => {
   const [year, setYear] = useState(thisYear);
@@ -109,6 +118,7 @@ export default ({ data }) => {
             <AudioInfo
               data={data}
               singleAudio={singleAudio}
+              changeDjs={changeDjs}
             />
             )}
             {year === 'Total' ? <SVGStat />
@@ -119,6 +129,7 @@ export default ({ data }) => {
                   djs={djs}
                   locateActivity={locateActivity}
                   setActivity={setActivity}
+                  setDjs={setDjs}
                 />
               )}
           </div>
@@ -130,12 +141,13 @@ export default ({ data }) => {
 
 // Child components
 const ImgFiles = ({
-  data, djs, year, changeDjs,
+  data, djs, year, changeDjs, smallSize
 }) => {
-  const avatarSize = year === 'Total' ? 2 : 3;
+  const avatarSize = year === 'Total' || smallSize ? 2 : 3;
+  const getDjsId = (s) => s.node.image.originalName.split('.')[0]
   let avatars = data.avatars.edges;
-  avatars = avatars.filter((a) => djs.includes(a.node.image.originalName.split('.')[0]));
-  avatars = avatars.sort((a, b) => (+a.node.image.originalName.split('.')[0]) - (+b.node.image.originalName.split('.')[0]));
+  avatars = avatars.filter((a) => djs.includes(getDjsId(a)));
+  avatars = avatars.sort((a, b) => (djs.indexOf(getDjsId(a)) - djs.indexOf(getDjsId(b))));
 
   const handleClick = (djsRootName) => {
     const djsName = djsRootName.split('.')[0];
@@ -144,7 +156,7 @@ const ImgFiles = ({
   return (
     <>
       {avatars.map((edge) => (
-        <picture title={edge.node.image.originalName} onClick={() => handleClick(edge.node.image.originalName)} className={styles.picture}>
+        <picture title={djsObj[getDjsId(edge)]} onClick={() => handleClick(edge.node.image.originalName)} className={styles.picture}>
           <source
             srcSet={edge.node.image.srcSet}
             type="image/jpeg"
@@ -246,23 +258,23 @@ const AudiosMap = ({
   return (
     <div>
       <RunMapButtons changeYear={changeYear} />
-      <ImgFiles data={data} djs={djs} year={year} changeDjs={changeDjs} />
-      <h1>
+      <h2 style={{color: 'purple'}} >
         {year}
         {' '}
         电台时长
         {' '}
         {duration}
-      </h1>
+      </h2>
+      <ImgFiles data={data} djs={djs} year={year} changeDjs={changeDjs} />
     </div>
   );
 };
 
-const AudioInfo = ({ data, singleAudio }) => {
+const AudioInfo = ({ data, singleAudio, changeDjs }) => {
   return (
   <div>
-    <h1>{singleAudio.title}</h1>
-    <ImgFiles data={data} djs={singleAudio.djs.slice()} />
+    <h2><a target="_blank" href={`${audioRoot}${singleAudio.audio_id}`}>{singleAudio.title}</a></h2>
+    <ImgFiles data={data} djs={singleAudio.djs.slice()} smallSize={true} changeDjs={changeDjs} />
   </div>
   )
 };
@@ -301,29 +313,35 @@ const RunMapButtons = ({ changeYear }) => {
   );
 };
 
-const AudioTable = ({ audios, year, locateActivity, setActivity }) => {
+const AudioTable = ({ audios, year, locateActivity, setActivity, setDjs }) => {
   const [audioIndex, setAudioIndex] = useState(-1);
   const [sortFuncInfo, setSortFuncInfo] = useState('');
 
-  const sortLikesFunc = (a, b) => (sortFuncInfo === 'Likes' ? a.likes_count - b.likes_count : b.likes_count - a.likes_count);
-  const sortCommentsFunc = (a, b) => (sortFuncInfo === 'Comments' ? a.comments_count - b.comments_count : b.comments_count - a.comments_count);
-  const sortBookmarksFunc = (a, b) => (sortFuncInfo === 'Bookmarks' ? a.bookmarks_count - b.bookmarks_count : b.bookmarks_count - a.bookmarks_count);
-  const sortDateFuncClick = sortFuncInfo === 'Date' ? sortDateFunc : sortDateFuncReverse;
+  let fDjsSort = getSortDjsByAttr;
+  const sortLikesFuncTable= sortFuncInfo === 'Likes' ? sortLikesFunc : sortLikesFuncReverse;
+  const sortCommentsFuncTable = sortFuncInfo === 'Comments' ? sortCommentsFunc : sortCommentsFuncReverse;
+  const sortBookmarksFuncTable = sortFuncInfo === 'Bookmarks' ? sortBookmarksFunc : sortBookmarksFuncReverse;
+  const sortDateFuncTable = sortFuncInfo === 'Date' ? sortDateFunc : sortDateFuncReverse;
+
   const sortFuncMap = new Map([
-    ['Likes', sortLikesFunc],
-    ['Comments', sortCommentsFunc],
-    ['Bookmarks', sortBookmarksFunc],
-    ['Date', sortDateFuncClick],
+    ['Likes', sortLikesFuncTable],
+    ['Comments', sortCommentsFuncTable],
+    ['Bookmarks', sortBookmarksFuncTable],
+    ['Date', sortDateFuncTable],
   ]);
   const handleClick = (e) => {
-    const funcName = e.target.innerHTML;
-    if (sortFuncInfo === funcName) {
+    const attrName = e.target.innerHTML;
+    if (sortFuncInfo === attrName) {
       setSortFuncInfo('');
+      fDjsSort = getSortDjsByAttr;
     } else {
-      setSortFuncInfo(funcName);
+      setSortFuncInfo(attrName);
+      fDjsSort = getSortDjsByAttrReverse
     }
-    const f = sortFuncMap.get(e.target.innerHTML);
-    setActivity(filterAndSortAudios(audios, filterYear, year, f));
+    const fTableSort = sortFuncMap.get(attrName);
+    const s = filterAndSortAudios(audios, filterYear, year, fTableSort)
+    setActivity(s);
+    setDjs(fDjsSort(s, audioAttrMap.get(attrName)))
   };
 
   return (
