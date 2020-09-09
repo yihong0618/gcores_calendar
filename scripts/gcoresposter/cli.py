@@ -94,20 +94,18 @@ def main():
     )
     args_parser.add_argument("--logfile", dest="logfile", metavar="FILE", type=str)
     args_parser.add_argument(
-        "--special-distance",
-        dest="special_distance",
+        "--special-likes",
+        dest="special_likes",
         metavar="DISTANCE",
         type=float,
-        default=10.0,
-        help="Special Distance1 by km and color with the special_color",
+        default=500.0,
     )
     args_parser.add_argument(
-        "--special-distance2",
-        dest="special_distance2",
+        "--special-likes2",
+        dest="special_likes2",
         metavar="DISTANCE",
         type=float,
-        default=20.0,
-        help="Special Distance2 by km and corlor with the special_color2",
+        default=1000.0,
     )
     args_parser.add_argument(
         "--min-distance",
@@ -118,10 +116,8 @@ def main():
         help="min distance by km for track filter",
     )
 
-
     for _, drawer in drawers.items():
         drawer.create_args(args_parser)
-
     args = args_parser.parse_args()
 
     for _, drawer in drawers.items():
@@ -135,9 +131,9 @@ def main():
     p.title = "Gcores Calendar"
     p.athlete = "Gcores Audios"
 
-    p.special_distance = {
-        "special_distance": args.special_distance,
-        "special_distance2": args.special_distance2,
+    p.special_likes = {
+        "special_likes": args.special_likes,
+        "special_likes2": args.special_likes2,
     }
 
     p.colors = {

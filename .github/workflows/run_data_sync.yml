@@ -1,0 +1,60 @@
+name: Sync Data
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  push:
+    branches:
+      - master
+    paths:
+      - scripts/gcoresposter/cli.py
+      - scripts/gen.py
+
+jobs:
+  sync:
+    name: Sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+
+      - name: Configure pip cache
+        uses: actions/cache@v1
+        id: pip-cache
+        with:
+          path: venv
+          key: pip-1-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+        if: steps.pip-cache.outputs.cache-hit != 'true'
+
+      - name: Run sync script
+        run: |
+          source venv/bin/activate
+          python scripts/gen.py
+
+      - name: Make svg GitHub profile
+        run: |
+          source venv/bin/activate
+          python scripts/gcoresposter/cli.py --special-likes 500 --special-likes2 1000 --special-color '#a68f95' --special-color2 '#f44336'
+
+      - name: Push new audio
+        uses: github-actions-x/commit@v2.6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Add new audio"
+          files: activities src/static/ scripts/data.db assets/
+          rebase: 'true'
+          name: yihong0618
+          email: zouzou0208@gmail.com

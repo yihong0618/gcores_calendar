@@ -27,7 +27,7 @@ class Poster:
             "special": "#FFFF00",
             "track": "#4DD2FF",
         }
-        self.special_distance = {"special_distance1": "10", "special_distance2": "20"}
+        self.special_likes = {"special_likes1": "10", "special_likes2": "20"}
         self.width = 200
         self.height = 300
         self.years = set()
@@ -42,7 +42,7 @@ class Poster:
         self.__compute_years(tracks)
         for track in tracks:
             if int(track["created_at"][:4]) < 2000:
-                continue 
+                continue
             text_date = track["created_at"][:10]
             if text_date in self.tracks_by_date:
                 self.tracks_by_date[text_date].append(track)
@@ -74,12 +74,9 @@ class Poster:
 
     def __draw_footer(self, d):
         text_color = self.colors["text"]
-        header_style = "font-size:4px; font-family:Arial"
         value_style = "font-size:9px; font-family:Arial"
-        small_value_style = "font-size:3px; font-family:Arial"
 
         self.__compute_track_statistics()
-
         d.add(
             d.text(
                 self.athlete,
@@ -90,22 +87,21 @@ class Poster:
         )
         d.add(
             d.text(
-                "Total" + f": {len(self.tracks)}",
-                insert=(140, self.height-6),
+                "Audios" + f": {len(self.tracks)}",
+                insert=(143, self.height-6),
                 fill=text_color,
                 style=value_style,
             )
         )
-
 
     def __compute_track_statistics(self):
         length_range = ValueRange()
         total_likes = 0
         total_length_year_dict = defaultdict(int)
         for t in self.tracks:
-            date =  datetime.datetime.strptime(t["created_at"].split(".")[0], "%Y-%m-%dT%H:%M:%S")
+            date = datetime.datetime.strptime(t["created_at"].split(".")[0], "%Y-%m-%dT%H:%M:%S")
             year = date.year
-            likes =  t.get("likes_count", 0)
+            likes = t.get("likes_count", 0)
             total_likes += likes
             total_length_year_dict[year] += likes
             length_range.extend(likes)
@@ -119,4 +115,3 @@ class Poster:
             except:
                 pass
         self.years = sorted([int(i) for i in list(self.years)])
-

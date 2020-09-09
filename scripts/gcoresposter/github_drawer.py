@@ -94,19 +94,19 @@ class GithubDrawer(TracksDrawer):
                     date_title = str(github_rect_day)
                     if date_title in self.poster.tracks_by_date:
                         tracks = self.poster.tracks_by_date[date_title]
-                        length = sum([t["likes_count"] for t in tracks])
-                        distance1 = self.poster.special_distance["special_distance"]
-                        distance2 = self.poster.special_distance["special_distance2"]
-                        has_special = distance1 < length < distance2
+                        likes = sum([t["likes_count"] for t in tracks])
+                        distance1 = self.poster.special_likes["special_likes"]
+                        distance2 = self.poster.special_likes["special_likes2"]
+                        has_special = distance1 < likes < distance2
                         color = self.color(
-                            self.poster.length_range_by_date, length, has_special
+                            self.poster.length_range_by_date, likes, has_special
                         )
-                        if length >= distance2:
+                        if likes >= distance2:
                             color = self.poster.colors.get(
                                 "special2"
                             ) or self.poster.colors.get("special")
-                        str_length = str(length) 
-                        date_title = f"{date_title} {str_length} Likes"
+                        str_likes = str(likes)
+                        date_title = f"{date_title} {str_likes} Likes"
 
                     rect = dr.rect((rect_x, rect_y), dom, fill=color)
                     rect.set_desc(title=date_title)
