@@ -1,12 +1,4 @@
-"""Create and maintain info about a given activity track (corresponding to one GPX file)."""
-# Copyright 2016-2019 Florian Pigorsch & Contributors. All rights reserved.
-#
-# Use of this source code is governed by a MIT-style
-# license that can be found in the LICENSE file.
-
-import datetime
 import gpxpy as mod_gpxpy
-import json
 import os
 import s2sphere as s2
 from exceptions import TrackLoadError

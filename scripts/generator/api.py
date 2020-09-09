@@ -1,4 +1,5 @@
 import requests
+import shutil
 from .config import AUDIOS_API, DJS_API, AVATAR_PNG_URL
 
 
@@ -26,11 +27,15 @@ def get_avatar(thumb, djs_id, file_path):
     save flil name as djs id
     """
     try:
+        # djs no thumb to download the default
+        if not thumb:
+            shutil.copy2(file_path + "avatar-default.png", file_path + djs_id + ".png")
+            return True
         url = AVATAR_PNG_URL.format(thumb=thumb)
-        end =  "." + url.split("/")[3].split("?")[0].split(".")[-1]
         response = requests.get(url)
         if response.status_code == 200:
-            with open(file_path + djs_id + end, 'wb') as f:
+            # change all to png
+            with open(file_path + djs_id + ".png", 'wb') as f:
                 f.write(response.content)
         return True
     except:

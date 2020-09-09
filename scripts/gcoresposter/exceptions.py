@@ -9,11 +9,6 @@ class PosterError(Exception):
     pass
 
 
-class TrackLoadError(PosterError):
-    "Something went wrong when loading a track file"
-    pass
-
-
 class ParameterError(PosterError):
     "Something's wrong with user supplied parameters"
     pass

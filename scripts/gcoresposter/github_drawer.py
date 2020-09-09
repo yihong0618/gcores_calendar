@@ -3,7 +3,6 @@ import datetime
 import locale
 import svgwrite
 
-import utils
 from exceptions import PosterError
 from poster import Poster
 from tracks_drawer import TracksDrawer
@@ -63,7 +62,7 @@ class GithubDrawer(TracksDrawer):
             dr.add(
                 dr.text(
                     f"{year_length} Likes",
-                    insert=(offset.tuple()[0] + 165, offset.tuple()[1] + 2),
+                    insert=(offset.tuple()[0] + 160, offset.tuple()[1] + 4),
                     fill=self.poster.colors["text"],
                     alignment_baseline="hanging",
                     style=year_length_style,
@@ -90,17 +89,19 @@ class GithubDrawer(TracksDrawer):
                         break
                     rect_y += 3.5
                     color = "#444444"
+                    # special_color1 = "#a68f95"
+                    # special_color2 = "#f44336"
                     date_title = str(github_rect_day)
                     if date_title in self.poster.tracks_by_date:
                         tracks = self.poster.tracks_by_date[date_title]
                         length = sum([t["likes_count"] for t in tracks])
                         distance1 = self.poster.special_distance["special_distance"]
                         distance2 = self.poster.special_distance["special_distance2"]
-                        has_special = distance1 < length / 1000 < distance2
+                        has_special = distance1 < length < distance2
                         color = self.color(
                             self.poster.length_range_by_date, length, has_special
                         )
-                        if length / 1000 >= distance2:
+                        if length >= distance2:
                             color = self.poster.colors.get(
                                 "special2"
                             ) or self.poster.colors.get("special")

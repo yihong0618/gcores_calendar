@@ -1,27 +1,5 @@
-"""Represent a range of numerical values"""
-# Copyright 2016-2019 Florian Pigorsch & Contributors. All rights reserved.
-#
-# Use of this source code is governed by a MIT-style
-# license that can be found in the LICENSE file.
-
 
 class ValueRange:
-    """Represent a range of numerical values.
-
-    Attributes:
-        _lower: Lower bound of range.
-        _upper: Upper bound of range.
-
-    Methods:
-        from_pair: Return a new ValueRange object from a pair of floats.
-        is_valid: Return True if lower bound is set, else False.
-        lower: Return lower bound.
-        upper: Return upper bound.
-        diameter: Return difference between upper and lower bounds if valid, else 0.
-        contains: Returns True if the range contains value.
-        extend: Adjust the range to include value.
-
-    """
 
     def __init__(self):
         self._lower = None

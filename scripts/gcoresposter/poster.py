@@ -6,10 +6,7 @@
 
 from collections import defaultdict
 import datetime
-import gettext
-import locale
 import svgwrite
-from utils import format_float
 from value_range import ValueRange
 from xy import XY
 
@@ -38,11 +35,6 @@ class Poster:
         self.trans = None
 
     def set_tracks(self, tracks):
-        """Associate the set of tracks with this poster.
-
-        In addition to setting self.tracks, also compute the necessary attributes for the Poster
-        based on this set of tracks.
-        """
         self.tracks = tracks
         self.tracks_by_date = {}
         self.length_range = ValueRange()
@@ -72,22 +64,6 @@ class Poster:
         self.__draw_tracks(d, XY(self.width - 20, self.height - 30 - 30), XY(10, 30))
         d.save()
 
-    def m2u(self, m):
-        """Convert meters to kilometers or miles, according to units."""
-        if self.units == "metric":
-            return 0.001 * m
-        return 0.001 * m / 1.609344
-
-    def u(self):
-        """Return the unit of distance being used on the Poster."""
-        if self.units == "metric":
-            return "km"
-        return "mi"
-
-    def format_distance(self, d: float) -> str:
-        """Formats a distance using the locale specific float format and the selected unit."""
-        return format_float(self.m2u(d)) + " " + self.u()
-
     def __draw_tracks(self, d, size: XY, offset: XY):
         self.tracks_drawer.draw(d, size, offset)
 
@@ -102,92 +78,30 @@ class Poster:
         value_style = "font-size:9px; font-family:Arial"
         small_value_style = "font-size:3px; font-family:Arial"
 
-        (
-            total_length,
-            average_length,
-            min_length,
-            max_length,
-            weeks,
-        ) = self.__compute_track_statistics()
+        self.__compute_track_statistics()
 
         d.add(
             d.text(
-                "",
-                insert=(10, self.height - 20),
-                fill=text_color,
-                style=header_style,
-            )
-        )
-        d.add(
-            d.text(
                 self.athlete,
-                insert=(10, self.height - 10),
+                insert=(10, self.height-6),
                 fill=text_color,
                 style=value_style,
             )
         )
         d.add(
             d.text(
-                "",
-                insert=(120, self.height - 20),
+                "Total" + f": {len(self.tracks)}",
+                insert=(140, self.height-6),
                 fill=text_color,
-                style=header_style,
+                style=value_style,
             )
         )
-        d.add(
-            d.text(
-                "Audios" + f": {len(self.tracks)}",
-                insert=(120, self.height - 15),
-                fill=text_color,
-                style=small_value_style,
-            )
-        )
-        d.add(
-            d.text(
-                "Weekly" + ": " + format_float(len(self.tracks) / weeks),
-                insert=(120, self.height - 10),
-                fill=text_color,
-                style=small_value_style,
-            )
-        )
-        d.add(
-            d.text(
-                "Total" + ": " + self.format_distance(total_length),
-                insert=(141, self.height - 15),
-                fill=text_color,
-                style=small_value_style,
-            )
-        )
-        d.add(
-            d.text(
-                "Avg" + ": " + self.format_distance(average_length),
-                insert=(141, self.height - 10),
-                fill=text_color,
-                style=small_value_style,
-            )
-        )
-        d.add(
-            d.text(
-                "Min" + ": " + self.format_distance(min_length),
-                insert=(167, self.height - 15),
-                fill=text_color,
-                style=small_value_style,
-            )
-        )
-        d.add(
-            d.text(
-                "Max" + ": " + self.format_distance(max_length),
-                insert=(167, self.height - 10),
-                fill=text_color,
-                style=small_value_style,
-            )
-        )
+
 
     def __compute_track_statistics(self):
         length_range = ValueRange()
         total_likes = 0
         total_length_year_dict = defaultdict(int)
-        weeks = {}
         for t in self.tracks:
             date =  datetime.datetime.strptime(t["created_at"].split(".")[0], "%Y-%m-%dT%H:%M:%S")
             year = date.year
@@ -195,16 +109,7 @@ class Poster:
             total_likes += likes
             total_length_year_dict[year] += likes
             length_range.extend(likes)
-            # time.isocalendar()[1] -> week number
-            weeks[(year, date.isocalendar()[1])] = 1
         self.total_length_year_dict = total_length_year_dict
-        return (
-            total_likes,
-            total_likes / len(self.tracks),
-            length_range.lower(),
-            length_range.upper(),
-            len(weeks),
-        )
 
     def __compute_years(self, tracks):
         for t in tracks:

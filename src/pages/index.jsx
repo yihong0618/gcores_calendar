@@ -9,7 +9,7 @@ import {
   filterAndSortAudios, secondsToHms, filterYear, filterDjs, scrollToMap, intComma,
   sortDateFunc, sortDateFuncReverse, sortLikesFunc, sortLikesFuncReverse,
   sortCommentsFunc, sortCommentsFuncReverse, sortBookmarksFunc, sortBookmarksFuncReverse,
-  getSortDjsByAttr, getSortDjsByAttrReverse
+  getSortDjsByAttr, getSortDjsByAttrReverse,
 } from '../utils/utils';
 import { audioAttrMap, audioRoot, djsRoot } from '../utils/const';
 import styles from './gocres.module.scss';
@@ -67,10 +67,11 @@ if (yearsArr) {
   [thisYear] = yearsArr;
 }
 
-const djsObj = {}
+// djs info
+const djsObj = {};
 djs.forEach((d) => {
-  djsObj[d.user_id] = d.nickname
-})
+  djsObj[d.user_id] = d.nickname;
+});
 
 // Page
 export default ({ data }) => {
@@ -92,9 +93,38 @@ export default ({ data }) => {
   };
 
   const changeDjs = (djsName) => {
-    const temp = filterAndSortAudios(activities, filterYear, year, sortDateFunc)
+    const temp = filterAndSortAudios(activities, filterYear, year, sortDateFunc);
     setActivity(filterAndSortAudios(temp, filterDjs, djsName, sortDateFunc));
   };
+
+  useEffect(() => {
+    if (year !== 'Total') {
+      return;
+    }
+    let rectArr = document.querySelectorAll('rect');
+    if (rectArr.length !== 0) {
+      rectArr = Array.from(rectArr).slice(1);
+    }
+
+    rectArr.forEach((rect) => {
+      const rectColor = rect.getAttribute('fill');
+      // not run has no click event
+      if (rectColor !== '#444444') {
+        const audioDate= rect.innerHTML;
+        // ingnore the error
+        const [audioName] = audioDate.match(/\d{4}-\d{1,2}-\d{1,2}/) || [];
+        const audioLocate = audios.filter(
+          (r) => r.created_at.slice(0, 10) === audioName,
+        ).sort((a, b) => b.likes_count - a.likes_count)[0];
+
+        // do not add the event next time
+        // maybe a better way?
+        if (audioLocate) {
+          rect.onclick = () => locateActivity(audioLocate);
+        }
+      }
+    })
+  }, year)
 
   return (
     <>
@@ -141,12 +171,13 @@ export default ({ data }) => {
 
 // Child components
 const ImgFiles = ({
-  data, djs, year, changeDjs, smallSize
+  data, djs, year, changeDjs, smallSize,
 }) => {
   const avatarSize = year === 'Total' || smallSize ? 2 : 3;
-  const url = year === 'Total' ? djsRoot : '#'
-  const getDjsId = (s) => s.node.image.originalName.split('.')[0]
+  const url = year === 'Total' ? djsRoot : '#';
+  const getDjsId = (s) => s.node.image.originalName.split('.')[0];
   let avatars = data.avatars.edges;
+  // filter and sort djs map
   avatars = avatars.filter((a) => djs.includes(getDjsId(a)));
   avatars = avatars.sort((a, b) => (djs.indexOf(getDjsId(a)) - djs.indexOf(getDjsId(b))));
 
@@ -157,21 +188,21 @@ const ImgFiles = ({
   return (
     <>
       {avatars.map((edge) => (
-        <Link to={url+getDjsId(edge)}>
-        <picture title={djsObj[getDjsId(edge)]} onClick={() => handleClick(edge.node.image.originalName)} className={styles.picture}>
-          <source
-            srcSet={edge.node.image.srcSet}
-            type="image/jpeg"
-          />
-          <source
-            srcSet={edge.node.image.srcSetWebp}
-            type="image/webp"
-          />
-          <img
-            className={`dib w${avatarSize} h${avatarSize} br-100`}
-            src={edge.node.image.base64}
-          />
-        </picture>
+        <Link to={url + getDjsId(edge)} key={getDjsId(edge)}>
+          <picture key={getDjsId(edge)} title={djsObj[getDjsId(edge)]} onClick={() => handleClick(edge.node.image.originalName)} className={styles.picture}>
+            <source
+              srcSet={edge.node.image.srcSet}
+              type="image/jpeg"
+            />
+            <source
+              srcSet={edge.node.image.srcSetWebp}
+              type="image/webp"
+            />
+            <img
+              className={`dib w${avatarSize} h${avatarSize} br-100`}
+              src={edge.node.image.base64}
+            />
+          </picture>
         </Link>
       ))}
     </>
@@ -261,7 +292,7 @@ const AudiosMap = ({
   return (
     <div>
       <RunMapButtons changeYear={changeYear} />
-      <h2 style={{color: 'purple'}} >
+      <h2 style={{ color: 'purple' }}>
         {year}
         {' '}
         电台时长
@@ -273,14 +304,12 @@ const AudiosMap = ({
   );
 };
 
-const AudioInfo = ({ data, singleAudio, changeDjs }) => {
-  return (
+const AudioInfo = ({ data, singleAudio, changeDjs }) => (
   <div>
     <h2><a target="_blank" href={`${audioRoot}${singleAudio.audio_id}`}>{singleAudio.title}</a></h2>
-    <ImgFiles data={data} djs={singleAudio.djs.slice()} smallSize={true} changeDjs={changeDjs} />
+    <ImgFiles data={data} djs={singleAudio.djs.slice()} smallSize changeDjs={changeDjs} />
   </div>
-  )
-};
+);
 
 const RunMapButtons = ({ changeYear }) => {
   const yearsButtons = yearsArr.slice();
@@ -316,12 +345,14 @@ const RunMapButtons = ({ changeYear }) => {
   );
 };
 
-const AudioTable = ({ audios, year, locateActivity, setActivity, setDjs }) => {
+const AudioTable = ({
+  audios, year, locateActivity, setActivity, setDjs,
+}) => {
   const [audioIndex, setAudioIndex] = useState(-1);
   const [sortFuncInfo, setSortFuncInfo] = useState('');
 
   let fDjsSort = getSortDjsByAttr;
-  const sortLikesFuncTable= sortFuncInfo === 'Likes' ? sortLikesFunc : sortLikesFuncReverse;
+  const sortLikesFuncTable = sortFuncInfo === 'Likes' ? sortLikesFunc : sortLikesFuncReverse;
   const sortCommentsFuncTable = sortFuncInfo === 'Comments' ? sortCommentsFunc : sortCommentsFuncReverse;
   const sortBookmarksFuncTable = sortFuncInfo === 'Bookmarks' ? sortBookmarksFunc : sortBookmarksFuncReverse;
   const sortDateFuncTable = sortFuncInfo === 'Date' ? sortDateFunc : sortDateFuncReverse;
@@ -339,12 +370,12 @@ const AudioTable = ({ audios, year, locateActivity, setActivity, setDjs }) => {
       fDjsSort = getSortDjsByAttr;
     } else {
       setSortFuncInfo(attrName);
-      fDjsSort = getSortDjsByAttrReverse
+      fDjsSort = getSortDjsByAttrReverse;
     }
     const fTableSort = sortFuncMap.get(attrName);
-    const s = filterAndSortAudios(audios, filterYear, year, fTableSort)
+    const s = filterAndSortAudios(audios, filterYear, year, fTableSort);
     setActivity(s);
-    setDjs(fDjsSort(s, audioAttrMap.get(attrName)))
+    setDjs(fDjsSort(s, audioAttrMap.get(attrName)));
   };
 
   return (
@@ -354,7 +385,7 @@ const AudioTable = ({ audios, year, locateActivity, setActivity, setDjs }) => {
           <tr>
             <th />
             {Array.from(sortFuncMap.keys()).map((k) => (
-              <th onClick={(e) => handleClick(e)}>{k}</th>
+              <th key={k} onClick={(e) => handleClick(e)}>{k}</th>
             ))}
           </tr>
         </thead>

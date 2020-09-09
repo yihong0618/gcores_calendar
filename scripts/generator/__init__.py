@@ -1,14 +1,10 @@
 import sys
+import os
 import time
-from typing import Set
-
-import arrow  # type: ignore
-
-# from sqlalchemy import func
 
 from .db import Audio, Djs, init_db, update_or_create_audio 
 from .api import get_audios_page_data, get_djs_data, get_avatar
-from .config import LIMIT
+from .config import LIMIT, IMG_DIR
 
 
 class Generator:
@@ -72,6 +68,25 @@ class Generator:
             djs_list.append(d.to_dict())
 
         return audios_list, djs_list
+    
+    def add_missing_djs_icon(self):
+        djs_ids = self.session.query(Djs.user_id).all()
+        djs_ids = set([str(i[0]) for i in djs_ids])
+        imgs = os.listdir(IMG_DIR)
+        dir_djs_ids = [i.split(".")[0] for i in imgs if i.split(".")[0].isdigit()]
+        missing_ids = djs_ids - set(dir_djs_ids)
+        for d in missing_ids:
+            self.get_thumb_and_download(d)
+
+    def get_thumb_and_download(self, djs_id):
+        r = get_djs_data(djs_id)
+        attributes = r["data"]["attributes"]
+        thumb = attributes["thumb"] 
+
+        # download thumb
+        get_avatar(thumb, djs_id, self.file_path)
+        return attributes
+        
 
     def _add_djs(self):
         djs_ids = self.session.query(Djs.user_id).all()
@@ -80,8 +95,7 @@ class Generator:
         if not self.djs_set:
             return
         for djs_id in new_djs_ids:
-            r = get_djs_data(djs_id)
-            attributes = r["data"]["attributes"]
+            attributes = self.get_attributes_and_download()
             thumb = attributes["thumb"] 
 
             # download thumb

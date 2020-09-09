@@ -11,6 +11,7 @@ from generator import Generator
 
 AVATAR_PATH = "src/images/"
 SQL_FILE = "scripts/data.db"
+SAVE_DIR = "assets/github.svg"
 
 
 def main():
@@ -22,60 +23,13 @@ def main():
 
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument(
-        "--gpx-dir",
-        dest="gpx_dir",
-        metavar="DIR",
-        type=str,
-        default=".",
-        help="Directory containing GPX files (default: current directory).",
-    )
-    args_parser.add_argument(
-        "--output",
-        metavar="FILE",
-        type=str,
-        default="poster.svg",
-        help='Name of generated SVG image file (default: "poster.svg").',
-    )
-    args_parser.add_argument(
-        "--language",
-        metavar="LANGUAGE",
-        type=str,
-        default="",
-        help="Language (default: english).",
-    )
-    args_parser.add_argument(
         "--year",
         metavar="YEAR",
         type=str,
         default="all",
         help='Filter tracks by year; "NUM", "NUM-NUM", "all" (default: all years)',
     )
-    args_parser.add_argument(
-        "--title", metavar="TITLE", type=str, help="Title to display."
-    )
-    args_parser.add_argument(
-        "--athlete",
-        metavar="NAME",
-        type=str,
-        default="John Doe",
-        help='Athlete name to display (default: "John Doe").',
-    )
-    args_parser.add_argument(
-        "--special",
-        metavar="FILE",
-        action="append",
-        default=[],
-        help="Mark track file from the GPX directory as special; use multiple times to mark "
-        "multiple tracks.",
-    )
     types = '", "'.join(drawers.keys())
-    args_parser.add_argument(
-        "--type",
-        metavar="TYPE",
-        default="grid",
-        choices=drawers.keys(),
-        help=f'Type of poster to create (default: "grid", available: "{types}").',
-    )
     args_parser.add_argument(
         "--background-color",
         dest="background_color",
@@ -164,6 +118,7 @@ def main():
         help="min distance by km for track filter",
     )
 
+
     for _, drawer in drawers.items():
         drawer.create_args(args_parser)
 
@@ -173,23 +128,12 @@ def main():
         drawer.fetch_args(args)
 
     log = logging.getLogger("audioTracker")
-    log.setLevel(logging.INFO if args.verbose else logging.ERROR)
-    if args.logfile:
-        handler = logging.FileHandler(args.logfile)
-        log.addHandler(handler)
 
+    # get first secode is djs
+    audios = g.load()[0]
 
-    tracks = g.load()
-    if not tracks:
-        if not args.clear_cache:
-            print("No tracks found.")
-        return
-
-    p.athlete = args.athlete
-    if args.title:
-        p.title = args.title
-    else:
-        p.title = p.trans("MY TRACKS")
+    p.title = "Gcores Calendar"
+    p.athlete = "Gcores Audios"
 
     p.special_distance = {
         "special_distance": args.special_distance,
@@ -205,10 +149,9 @@ def main():
         "text": args.text_color,
     }
     p.units = args.units
-    p.set_tracks(tracks)
-    if args.type == "github":
-        p.height = 55 + len(p.years) * 43
-    p.draw(drawers[args.type], args.output)
+    p.set_tracks(audios)
+    p.height = 45 + len(p.years) * 43
+    p.draw(drawers["github"], SAVE_DIR)
 
 
 if __name__ == "__main__":
