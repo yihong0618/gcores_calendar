@@ -54,7 +54,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "Add new audio"
-          files: activities src/static/ scripts/data.db assets/
+          files:  src/static/ scripts/data.db assets/
           rebase: 'true'
           name: yihong0618
           email: zouzou0208@gmail.com

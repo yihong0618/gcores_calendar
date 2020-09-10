@@ -21,7 +21,6 @@ def get_djs_data(djs_id):
     raise Exception("Something wrong get djs data")
 
 
-
 def get_avatar(thumb, djs_id, file_path):
     """
     save flil name as djs id
