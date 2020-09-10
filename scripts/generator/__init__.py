@@ -1,9 +1,12 @@
 import sys
 import os
+import subprocess
 import time
 
+from mutagen import mp3
+
 from .db import Audio, Djs, init_db, update_or_create_audio 
-from .api import get_audios_page_data, get_djs_data, get_avatar
+from .api import get_audios_page_data, get_djs_data, get_avatar, get_single_audio_info
 from .config import LIMIT, IMG_DIR
 
 
@@ -77,17 +80,39 @@ class Generator:
         missing_ids = djs_ids - set(dir_djs_ids)
         for d in missing_ids:
             self.get_thumb_and_download(d)
+    
+    def add_missing_duration(self):
+        missing_audios = list(self.session.query(Audio).filter_by(duration=0).all())
+        print(len(missing_audios))
+        for audio in missing_audios:
+            audio_id = audio.audio_id
+            print(audio_id)
+            audio_info = get_single_audio_info(audio_id)
+            try:
+                mp3_url = audio_info["included"][0]["attributes"]["audio"]
+            except:
+                mp3_url = ""
+
+            p = subprocess.Popen(['node', 'scripts/get_duration.js', mp3_url], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            out, err = p.communicate()
+            try:
+                new_duration = int(out.decode())
+            except:
+                new_duration = 0
+            print(new_duration)
+            audio.duration = new_duration
+            self.session.add(audio)
+        self.session.commit()
+
 
     def get_thumb_and_download(self, djs_id):
         r = get_djs_data(djs_id)
         attributes = r["data"]["attributes"]
         thumb = attributes["thumb"] 
-
         # download thumb
         get_avatar(thumb, djs_id, self.file_path)
         return attributes
         
-
     def _add_djs(self):
         djs_ids = self.session.query(Djs.user_id).all()
         djs_ids = set([str(i[0]) for i in djs_ids])

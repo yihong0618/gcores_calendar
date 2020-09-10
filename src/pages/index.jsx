@@ -93,8 +93,8 @@ export default ({ data }) => {
   };
 
   const changeDjs = (djsName) => {
-    const temp = filterAndSortAudios(activities, filterYear, year, sortDateFunc);
-    setActivity(filterAndSortAudios(temp, filterDjs, djsName, sortDateFunc));
+    // const temp = filterAndSortAudios(activities, filterYear, year, sortDateFunc);
+    setActivity(filterAndSortAudios(activities, filterDjs, djsName, sortDateFunc));
   };
 
   useEffect(() => {
@@ -421,6 +421,7 @@ const AudioRow = ({
     setAudioIndex(elementIndex);
     locateActivity(audio);
   };
+  const auddioTitleShow = audio.title.length >= 20 ? audio.title.slice(0, 20) + '...' : audio.title;
 
   return (
     <tr
@@ -430,7 +431,7 @@ const AudioRow = ({
         handleClick(e, audios, audio);
       }}
     >
-      <td title={audio.title}>{audio.title.slice(0, 20)}</td>
+      <td title={audio.title}>{auddioTitleShow}</td>
       <td>{audio.likes_count}</td>
       <td>{audio.comments_count}</td>
       <td>{audio.bookmarks_count}</td>

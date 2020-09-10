@@ -1,6 +1,6 @@
 import requests
 import shutil
-from .config import AUDIOS_API, DJS_API, AVATAR_PNG_URL
+from .config import AUDIOS_API, DJS_API, AVATAR_PNG_URL, AUDIO_INFO_URL
 
 
 def get_audios_page_data(offset, limit, sort):
@@ -19,6 +19,14 @@ def get_djs_data(djs_id):
     if r.status_code >= 200:
         return r.json()
     raise Exception("Something wrong get djs data")
+
+
+def get_single_audio_info(audio_id):
+    url = AUDIO_INFO_URL.format(audio_id=audio_id)
+    r = requests.get(url)
+    if r.status_code >= 200:
+        return r.json()
+    raise Exception("Something wrong get single audio data")
 
 
 def get_avatar(thumb, djs_id, file_path):

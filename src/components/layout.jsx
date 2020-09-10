@@ -4,7 +4,6 @@ import { Helmet } from "react-helmet";
 import { StaticQuery, graphql } from "gatsby";
 
 import "../styles/index.scss";
-import Header from "./header/header.jsx";
 
 const Layout = ({ children }) => (
   <StaticQuery
@@ -32,8 +31,7 @@ const Layout = ({ children }) => (
         >
           <html lang="en" />
         </Helmet>
-        <Header siteTitle={data.site.siteMetadata.title} />
-        <div className="pa3 pa5-l">{children}</div>
+        <div className="pa3 pa3-l">{children}</div>
       </Fragment>
     )}
   />

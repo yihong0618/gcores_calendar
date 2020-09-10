@@ -9574,6 +9574,11 @@ mozjpeg@^6.0.0:
     bin-wrapper "^4.0.0"
     logalot "^2.1.0"
 
+mp3-duration-estimate@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/mp3-duration-estimate/-/mp3-duration-estimate-1.0.1.tgz#9bd77cfe50c9182b3690bf1d663933b161f2503e"
+  integrity sha512-s7cH5mTg9woOJRlKUP/l1A1IAU6j/b0R0DScSeIeoPgqI2IpZEPLkIXR6hGuVSrvjf7/fgBMP541e+AWG1vaDQ==
+
 ms@2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.0.0.tgz#5608aeadfc00be6c2901df5f9861788de0d597c8"
