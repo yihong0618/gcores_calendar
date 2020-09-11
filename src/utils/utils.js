@@ -1,4 +1,4 @@
-const filterYearAudios = ((audio, year) => audio.created_at.slice(0, 4) === year);
+import { gcoresGeojson } from '../static/audio_counties';
 
 // sort funcs
 const sortDateFunc = (a, b) => new Date(b.created_at) - new Date(a.created_at);
@@ -73,8 +73,10 @@ const scrollToMap = () => {
   window.scroll(rect.left + window.scrollX, rect.top + window.scrollY);
 };
 
+const geoJsonForMap = () => gcoresGeojson;
+
 export {
   filterAndSortAudios, filterYear, filterDjs, sortDateFunc, sortDateFuncReverse, secondsToHms, scrollToMap, intComma,
   sortLikesFunc, sortLikesFuncReverse, sortCommentsFunc, sortCommentsFuncReverse, sortBookmarksFunc, sortBookmarksFuncReverse,
-  getSortDjsByAttr, getSortDjsByAttrReverse,
+  getSortDjsByAttr, getSortDjsByAttrReverse, geoJsonForMap
 };

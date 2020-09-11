@@ -1,4 +1,4 @@
-const chinaGeojson = {
+const gcoresGeojson = {
     type: 'FeatureCollection',
     features:
           [
@@ -529,5 +529,5 @@ const chinaGeojson = {
           ],
   };
   
-  export { chinaGeojson };
+  export { gcoresGeojson };
   

@@ -31,7 +31,7 @@ const Layout = ({ children }) => (
         >
           <html lang="en" />
         </Helmet>
-        <div className="pa3 pa3-l">{children}</div>
+        <div className="pa3 pa5-l">{children}</div>
       </Fragment>
     )}
   />

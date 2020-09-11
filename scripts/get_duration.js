@@ -1,3 +1,5 @@
+// this script is to getting the missing duration from api
+// see https://www.factorialcomplexity.com/blog/how-to-get-a-duration-of-a-remote-mp3-file
 const createEstimator = require('mp3-duration-estimate').default;
 const FetchDataReader = require('mp3-duration-estimate').FetchDataReader;
 const fetch = require('node-fetch');

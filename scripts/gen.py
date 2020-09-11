@@ -8,6 +8,7 @@ SQL_FILE = "scripts/data.db"
 
 def run():
     g = Generator(SQL_FILE, AVATAR_PATH)
+    # if you want host your won change False -> True
     g.sync(False)
     ############# if you want host by your own, un comment below two lines #################
     # g.add_missing_duration()

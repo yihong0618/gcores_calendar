@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import MapboxLanguage from '@mapbox/mapbox-gl-language';
+import ReactMapGL, { Source, Layer } from 'react-map-gl';
 import { Helmet } from 'react-helmet';
 
 import { Link, graphql } from 'gatsby';
@@ -9,9 +11,9 @@ import {
   filterAndSortAudios, secondsToHms, filterYear, filterDjs, scrollToMap, intComma,
   sortDateFunc, sortDateFuncReverse, sortLikesFunc, sortLikesFuncReverse,
   sortCommentsFunc, sortCommentsFuncReverse, sortBookmarksFunc, sortBookmarksFuncReverse,
-  getSortDjsByAttr, getSortDjsByAttrReverse,
+  getSortDjsByAttr, getSortDjsByAttrReverse, geoJsonForMap
 } from '../utils/utils';
-import { audioAttrMap, audioRoot, djsRoot } from '../utils/const';
+import { audioAttrMap, audioRoot, djsRoot, lightPlaces, MAPBOX_TOKEN } from '../utils/const';
 import styles from './gocres.module.scss';
 
 // const
@@ -80,6 +82,8 @@ export default ({ data }) => {
   const [singleAudio, setSingleAudio] = useState('');
   const [djs, setDjs] = useState(yearDJSMap.get(thisYear));
   const [singleDjs, setSingleDjs] = useState('')
+  const [audioIndex, setAudioIndex] = useState(-1);
+  
   const changeYear = (year) => {
     setYear(year);
     setDjs(yearDJSMap.get(year));
@@ -87,6 +91,7 @@ export default ({ data }) => {
     setSingleDjs('');
     scrollToMap();
     setActivity(filterAndSortAudios(activities, filterYear, year, sortDateFunc));
+    setAudioIndex(-1);
   };
 
   const locateActivity = (audio) => {
@@ -98,6 +103,7 @@ export default ({ data }) => {
     const temp = filterAndSortAudios(activities, filterYear, year, sortDateFunc);
     setSingleDjs(djsName)
     setActivity(filterAndSortAudios(activities, filterDjs, djsName, sortDateFunc));
+    setAudioIndex(-1);
   };
 
   useEffect(() => {
@@ -163,6 +169,8 @@ export default ({ data }) => {
                   locateActivity={locateActivity}
                   setActivity={setActivity}
                   setDjs={setDjs}
+                  audioIndex={audioIndex}
+                  setAudioIndex={setAudioIndex}
                 />
               )}
           </div>
@@ -214,6 +222,7 @@ const ImgFiles = ({
 
 const SVGStat = () => (
   <div>
+    <GcoresMap />
     <GitHubSvg className={styles.audioSVG} />
   </div>
 );
@@ -349,9 +358,8 @@ const RunMapButtons = ({ changeYear }) => {
 };
 
 const AudioTable = ({
-  audios, year, locateActivity, setActivity, setDjs
+  audios, year, locateActivity, setActivity, setDjs, audioIndex, setAudioIndex
 }) => {
-  const [audioIndex, setAudioIndex] = useState(-1);
   const [sortFuncInfo, setSortFuncInfo] = useState('');
 
   let fDjsSort = getSortDjsByAttr;
@@ -450,6 +458,79 @@ const Stat = ({
     <span className="f3 fw6 i">{description}</span>
   </div>
 );
+
+const GcoresMap = () => {
+  const [viewport, setViewport] = useState({
+    width: '100%',
+    height: 600,
+    latitude: 40.21,
+    longitude: 117.4219,
+    zoom: 3,
+  });
+
+  const addControlHandler = (event) => {
+    const map = event && event.target;
+    // set lauguage to Chinese if you use English please comment it
+    if (map) {
+      map.addControl(
+        new MapboxLanguage({
+          defaultLanguage: 'zh',
+        }),
+      );
+      map.setLayoutProperty('country-label-lg', 'text-field', [
+        'get',
+        'name_zh',
+      ]);
+    }
+  };
+  const filterProvinces = lightPlaces.slice();
+  // for geojson format
+  filterProvinces.unshift('in', 'name');
+  const geoData = geoJsonForMap();
+
+  return (
+    <ReactMapGL
+      {...viewport}
+      mapStyle="mapbox://styles/mapbox/dark-v9"
+      onViewportChange={setViewport}
+      onLoad={addControlHandler}
+      mapboxApiAccessToken={MAPBOX_TOKEN}
+    >
+      <Source id="data" type="geojson" data={geoData}>
+        <Layer
+          id="prvince"
+          type="fill"
+          paint={{
+            'fill-color': '#f44336',
+          }}
+          filter={filterProvinces}
+        />
+        <Layer
+          id="gocers"
+          type="line"
+          paint={{
+            'line-color': '#0f99a1',
+            'line-width':  1,
+          }}
+          layout={{
+            'line-join': 'round',
+            'line-cap': 'round',
+          }}
+        />
+
+      </Source>
+        <span className={styles.gcoresTitle}>{'核聚变走过的省市'}</span>
+    </ReactMapGL>
+  );
+};
+
+const SingleDjsInfo = () => {
+  return (
+    <div>
+      hahaha
+    </div>
+  )
+}
 
 export const query = graphql`
   query AvatarsQuery {
