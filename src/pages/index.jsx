@@ -79,10 +79,12 @@ export default ({ data }) => {
   const [audios, setActivity] = useState(filterAndSortAudios(activities, filterYear, year, sortDateFunc));
   const [singleAudio, setSingleAudio] = useState('');
   const [djs, setDjs] = useState(yearDJSMap.get(thisYear));
+  const [singleDjs, setSingleDjs] = useState('')
   const changeYear = (year) => {
     setYear(year);
     setDjs(yearDJSMap.get(year));
     setSingleAudio('');
+    setSingleDjs('');
     scrollToMap();
     setActivity(filterAndSortAudios(activities, filterYear, year, sortDateFunc));
   };
@@ -93,7 +95,8 @@ export default ({ data }) => {
   };
 
   const changeDjs = (djsName) => {
-    // const temp = filterAndSortAudios(activities, filterYear, year, sortDateFunc);
+    const temp = filterAndSortAudios(activities, filterYear, year, sortDateFunc);
+    setSingleDjs(djsName)
     setActivity(filterAndSortAudios(activities, filterDjs, djsName, sortDateFunc));
   };
 
@@ -236,7 +239,7 @@ const YearsStat = ({ audios, year, onClick }) => {
           <br />
         </p>
       </section>
-      <hr color="blue" />
+      <hr color="#0f99a1" />
       {yearsArrayUpdate.map((year) => (
         <YearStat key={year} audios={audios} year={year} onClick={onClick} />
       ))}
@@ -280,7 +283,7 @@ const YearStat = ({ audios, year, onClick }) => {
         <Stat value={sumComments} description=" Comments" />
         <Stat value={[...djsSet].length} description=" DJS" />
       </section>
-      <hr color="blue" />
+      <hr color="#0f99a1" />
     </div>
   );
 };
@@ -292,7 +295,7 @@ const AudiosMap = ({
   return (
     <div>
       <RunMapButtons changeYear={changeYear} />
-      <h2 style={{ color: 'purple' }}>
+      <h2 style={{ color: '#012033' }}>
         {year}
         {' '}
         电台时长
@@ -306,7 +309,7 @@ const AudiosMap = ({
 
 const AudioInfo = ({ data, singleAudio, changeDjs }) => (
   <div>
-    <h2><a target="_blank" href={`${audioRoot}${singleAudio.audio_id}`}>{singleAudio.title}</a></h2>
+    <h2 color="#012033"><a target="_blank" href={`${audioRoot}${singleAudio.audio_id}`} color='#012033'>{singleAudio.title}</a></h2>
     <ImgFiles data={data} djs={singleAudio.djs.slice()} smallSize changeDjs={changeDjs} />
   </div>
 );
@@ -320,7 +323,7 @@ const RunMapButtons = ({ changeYear }) => {
     e.target.style.color = 'rgb(244, 67, 54)';
 
     const elements = document.getElementsByClassName(styles.button);
-    elements[index].style.color = 'blue';
+    elements[index].style.color = '#0f99a1';
     setIndex(elementIndex);
   };
   return (
@@ -329,7 +332,7 @@ const RunMapButtons = ({ changeYear }) => {
         {yearsButtons.map((year) => (
           <li
             key={`${year}button`}
-            style={{ color: year === '2020' ? 'rgb(244, 67, 54)' : 'blue' }}
+            style={{ color: year === '2020' ? 'rgb(244, 67, 54)' : '#0f99a1' }}
             year={year}
             onClick={(e) => {
               changeYear(year);
@@ -346,7 +349,7 @@ const RunMapButtons = ({ changeYear }) => {
 };
 
 const AudioTable = ({
-  audios, year, locateActivity, setActivity, setDjs,
+  audios, year, locateActivity, setActivity, setDjs
 }) => {
   const [audioIndex, setAudioIndex] = useState(-1);
   const [sortFuncInfo, setSortFuncInfo] = useState('');
@@ -373,9 +376,8 @@ const AudioTable = ({
       fDjsSort = getSortDjsByAttrReverse;
     }
     const fTableSort = sortFuncMap.get(attrName);
-    const s = filterAndSortAudios(audios, filterYear, year, fTableSort);
-    setActivity(s);
-    setDjs(fDjsSort(s, audioAttrMap.get(attrName)));
+    setActivity(audios.sort(fTableSort));
+    setDjs(fDjsSort(filterAndSortAudios(activities, filterYear, year, fTableSort), audioAttrMap.get(attrName)));
   };
 
   return (
@@ -412,7 +414,7 @@ const AudioRow = ({
   // change click color
   const handleClick = (e, audios, audio) => {
     const elementIndex = audios.indexOf(audio);
-    e.target.parentElement.style.color = 'blue';
+    e.target.parentElement.style.color = '#0f99a1';
 
     const elements = document.getElementsByClassName(styles.audioRow);
     if (audioIndex !== -1) {

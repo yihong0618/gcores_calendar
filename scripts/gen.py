@@ -9,8 +9,8 @@ SQL_FILE = "scripts/data.db"
 def run():
     g = Generator(SQL_FILE, AVATAR_PATH)
     g.sync(False)
-    # if you want host by your own, un comment below two lines
-    g.add_missing_duration()
+    ############# if you want host by your own, un comment below two lines #################
+    # g.add_missing_duration()
     # g.add_missing_djs_icon()
 
     audios_list, djs_list = g.load()

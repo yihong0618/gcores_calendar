@@ -89,19 +89,20 @@ class GithubDrawer(TracksDrawer):
                         break
                     rect_y += 3.5
                     color = "#444444"
-                    # special_color1 = "#a68f95"
-                    # special_color2 = "#f44336"
                     date_title = str(github_rect_day)
                     if date_title in self.poster.tracks_by_date:
                         tracks = self.poster.tracks_by_date[date_title]
                         likes = sum([t["likes_count"] for t in tracks])
-                        distance1 = self.poster.special_likes["special_likes"]
-                        distance2 = self.poster.special_likes["special_likes2"]
-                        has_special = distance1 < likes < distance2
+                        likes_gap = self.poster.special_likes["special_likes"]
+                        likes_gap2 = self.poster.special_likes["special_likes2"]
+                        if year < 2014:
+                            likes_gap = likes_gap / 10
+                            likes_gap2 = likes_gap2 / 10
+                        has_special = likes_gap < likes < likes_gap2
                         color = self.color(
                             self.poster.length_range_by_date, likes, has_special
                         )
-                        if likes >= distance2:
+                        if likes >= likes_gap2:
                             color = self.poster.colors.get(
                                 "special2"
                             ) or self.poster.colors.get("special")

@@ -3,7 +3,6 @@ import os
 import subprocess
 import time
 
-from mutagen import mp3
 
 from .db import Audio, Djs, init_db, update_or_create_audio 
 from .api import get_audios_page_data, get_djs_data, get_avatar, get_single_audio_info

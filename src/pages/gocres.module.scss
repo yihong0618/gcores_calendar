@@ -22,6 +22,15 @@ $dark: rgb(26, 26, 26);
   }
 }
 
+a:link {
+  color: rgb(97, 98, 102);
+}
+
+/* visited link */
+a:visited {
+  color: rgb(29, 111, 210);
+}
+
 .audioTable {
   width: 100%;
   min-width: 700px;
@@ -80,10 +89,10 @@ $dark: rgb(26, 26, 26);
   display: inline-block;
   position: relative;
   cursor: pointer;
-  width: 8%;
+  width: 15%;
   padding: 10px;
   margin-top: 1px;
-  font-size: 12px;
+  font-size: 13px;
   text-align: center;
   color: write;
   font-family: sans-serif;
