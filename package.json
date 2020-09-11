@@ -28,18 +28,15 @@
     "tachyons": "^4.12.0",
     "tachyons-sass": "^4.9.5"
   },
-  "resolutions": {
-    "babel-plugin-remove-graphql-queries": "2.9.12"
-  },
   "devDependencies": {
-    "prettier": "2.1.0"
+    "prettier": "2.1.1"
   },
   "keywords": [
     "gatsby"
   ],
   "license": "0BSD",
   "scripts": {
-    "build": "gatsby build",
+    "build": "gatsby clean && gatsby build",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",
