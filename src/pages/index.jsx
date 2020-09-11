@@ -11,9 +11,11 @@ import {
   filterAndSortAudios, secondsToHms, filterYear, filterDjs, scrollToMap, intComma,
   sortDateFunc, sortDateFuncReverse, sortLikesFunc, sortLikesFuncReverse,
   sortCommentsFunc, sortCommentsFuncReverse, sortBookmarksFunc, sortBookmarksFuncReverse,
-  getSortDjsByAttr, getSortDjsByAttrReverse, geoJsonForMap
+  getSortDjsByAttr, getSortDjsByAttrReverse, geoJsonForMap,
 } from '../utils/utils';
-import { audioAttrMap, audioRoot, djsRoot, lightPlaces, MAPBOX_TOKEN } from '../utils/const';
+import {
+  audioAttrMap, audioRoot, djsRoot, lightPlaces, MAPBOX_TOKEN,
+} from '../utils/const';
 import styles from './gocres.module.scss';
 
 // const
@@ -81,9 +83,9 @@ export default ({ data }) => {
   const [audios, setActivity] = useState(filterAndSortAudios(activities, filterYear, year, sortDateFunc));
   const [singleAudio, setSingleAudio] = useState('');
   const [djs, setDjs] = useState(yearDJSMap.get(thisYear));
-  const [singleDjs, setSingleDjs] = useState('')
+  const [singleDjs, setSingleDjs] = useState('');
   const [audioIndex, setAudioIndex] = useState(-1);
-  
+
   const changeYear = (year) => {
     setYear(year);
     setDjs(yearDJSMap.get(year));
@@ -100,12 +102,12 @@ export default ({ data }) => {
   };
 
   const changeDjs = (djsName) => {
-    const temp = filterAndSortAudios(activities, filterYear, year, sortDateFunc);
-    setSingleDjs(djsName)
+    setSingleDjs(djsName);
     setActivity(filterAndSortAudios(activities, filterDjs, djsName, sortDateFunc));
     setAudioIndex(-1);
   };
 
+  // add total page svg click event
   useEffect(() => {
     if (year !== 'Total') {
       return;
@@ -119,7 +121,7 @@ export default ({ data }) => {
       const rectColor = rect.getAttribute('fill');
       // not run has no click event
       if (rectColor !== '#444444') {
-        const audioDate= rect.innerHTML;
+        const audioDate = rect.innerHTML;
         // ingnore the error
         const [audioName] = audioDate.match(/\d{4}-\d{1,2}-\d{1,2}/) || [];
         const audioLocate = audios.filter(
@@ -132,8 +134,8 @@ export default ({ data }) => {
           rect.onclick = () => locateActivity(audioLocate);
         }
       }
-    })
-  }, year)
+    });
+  }, year);
 
   return (
     <>
@@ -153,6 +155,12 @@ export default ({ data }) => {
               changeYear={changeYear}
               djs={djs}
             />
+            {singleDjs && (
+            <SingleDjsInfo
+              djsId={singleDjs}
+              audios={audios}
+            />
+            )}
             {singleAudio && (
             <AudioInfo
               data={data}
@@ -160,7 +168,7 @@ export default ({ data }) => {
               changeDjs={changeDjs}
             />
             )}
-            {year === 'Total' ? <SVGStat />
+            {year === 'Total' ? <TotalStat />
               : (
                 <AudioTable
                   audios={audios}
@@ -220,7 +228,8 @@ const ImgFiles = ({
   );
 };
 
-const SVGStat = () => (
+// stat on 'Total' page
+const TotalStat = () => (
   <div>
     <GcoresMap />
     <GitHubSvg className={styles.audioSVG} />
@@ -242,7 +251,7 @@ const YearsStat = ({ audios, year, onClick }) => {
           {yearsArr.length}
           年了，
           {yearsArr.length}
-          年不容易祝机核越来越好，下面是
+          年不容易祝机核越来越好。下面是
           {year}
           的电台数据
           <br />
@@ -318,7 +327,7 @@ const AudiosMap = ({
 
 const AudioInfo = ({ data, singleAudio, changeDjs }) => (
   <div>
-    <h2 color="#012033"><a target="_blank" href={`${audioRoot}${singleAudio.audio_id}`} color='#012033'>{singleAudio.title}</a></h2>
+    <h2 color="#012033"><a target="_blank" href={`${audioRoot}${singleAudio.audio_id}`} color="#012033">{singleAudio.title}</a></h2>
     <ImgFiles data={data} djs={singleAudio.djs.slice()} smallSize changeDjs={changeDjs} />
   </div>
 );
@@ -358,7 +367,7 @@ const RunMapButtons = ({ changeYear }) => {
 };
 
 const AudioTable = ({
-  audios, year, locateActivity, setActivity, setDjs, audioIndex, setAudioIndex
+  audios, year, locateActivity, setActivity, setDjs, audioIndex, setAudioIndex,
 }) => {
   const [sortFuncInfo, setSortFuncInfo] = useState('');
 
@@ -422,16 +431,16 @@ const AudioRow = ({
   // change click color
   const handleClick = (e, audios, audio) => {
     const elementIndex = audios.indexOf(audio);
-    e.target.parentElement.style.color = '#0f99a1';
+    e.target.parentElement.style.color = 'rgb(244, 67, 54)';
 
     const elements = document.getElementsByClassName(styles.audioRow);
     if (audioIndex !== -1) {
-      elements[audioIndex].style.color = 'rgb(244, 67, 54)';
+      elements[audioIndex].style.color = 'rgb(70, 70, 70)';
     }
     setAudioIndex(elementIndex);
     locateActivity(audio);
   };
-  const auddioTitleShow = audio.title.length >= 20 ? audio.title.slice(0, 20) + '...' : audio.title;
+  const auddioTitleShow = audio.title.length >= 20 ? `${audio.title.slice(0, 20)}...` : audio.title;
 
   return (
     <tr
@@ -445,7 +454,7 @@ const AudioRow = ({
       <td>{audio.likes_count}</td>
       <td>{audio.comments_count}</td>
       <td>{audio.bookmarks_count}</td>
-      <td className={styles.runDate}>{audio.created_at.slice(0, 10)}</td>
+      <td className={styles.audioDate}>{audio.created_at.slice(0, 10)}</td>
     </tr>
   );
 };
@@ -510,7 +519,7 @@ const GcoresMap = () => {
           type="line"
           paint={{
             'line-color': '#0f99a1',
-            'line-width':  1,
+            'line-width': 1,
           }}
           layout={{
             'line-join': 'round',
@@ -519,18 +528,34 @@ const GcoresMap = () => {
         />
 
       </Source>
-        <span className={styles.gcoresTitle}>{'核聚变走过的省市'}</span>
+      <span className={styles.gcoresTitle}>核聚变走过的省市</span>
     </ReactMapGL>
   );
 };
 
-const SingleDjsInfo = () => {
+const SingleDjsInfo = ({ djsId, audios }) => {
+  const djsInfo = {};
+  audios.forEach((audio) => {
+    djsInfo.duration = djsInfo.duration === undefined ? audio.duration : djsInfo.duration + audio.duration;
+    djsInfo.count = djsInfo.count === undefined ? 1 : djsInfo.count + 1;
+  });
   return (
-    <div>
-      hahaha
+    <div className="f3 fw6 i" style={{ paddingTop: '1rem', paddingBottom: '1rem' }}>
+      <li>
+        {'昵称: '}
+        {djsObj[djsId]}
+      </li>
+      <li>
+        {'总期数: '}
+        {djsInfo.count}
+      </li>
+      <li>
+        {'总时长: '}
+        {secondsToHms(djsInfo.duration)}
+      </li>
     </div>
-  )
-}
+  );
+};
 
 export const query = graphql`
   query AvatarsQuery {

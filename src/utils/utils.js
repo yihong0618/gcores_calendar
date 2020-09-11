@@ -78,5 +78,5 @@ const geoJsonForMap = () => gcoresGeojson;
 export {
   filterAndSortAudios, filterYear, filterDjs, sortDateFunc, sortDateFuncReverse, secondsToHms, scrollToMap, intComma,
   sortLikesFunc, sortLikesFuncReverse, sortCommentsFunc, sortCommentsFuncReverse, sortBookmarksFunc, sortBookmarksFuncReverse,
-  getSortDjsByAttr, getSortDjsByAttrReverse, geoJsonForMap
+  getSortDjsByAttr, getSortDjsByAttrReverse, geoJsonForMap,
 };
