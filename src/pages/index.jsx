@@ -247,11 +247,11 @@ const YearsStat = ({ audios, year, onClick }) => {
     <div className="fl w-100 w-30-l pb5 pr5-l">
       <section className="pb4" style={{ paddingBottom: '0rem' }}>
         <p>
-          机核
+          机核第
           {yearsArr.length}
           年了，
-          {yearsArr.length}
-          年不容易祝机核越来越好。下面是
+          走过的{yearsArr.length-1}
+          年不容易。祝机核越来越好，玩游戏的都是朋友。下面是
           {year}
           的电台数据
           <br />
