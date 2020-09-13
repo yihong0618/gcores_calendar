@@ -65,4 +65,3 @@ class Track:
             for latlng in line:
                 bbox = bbox.union(s2.LatLngRect.from_point(latlng.normalized()))
         return bbox
-

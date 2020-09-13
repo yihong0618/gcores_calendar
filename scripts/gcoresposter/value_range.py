@@ -1,6 +1,4 @@
-
 class ValueRange:
-
     def __init__(self):
         self._lower = None
         self._upper = None

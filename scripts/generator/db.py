@@ -16,15 +16,10 @@ AUDIO_KEYS = [
     "comments_count",
     "djs",
     "category_id",
-    "is_free"
+    "is_free",
 ]
 
-DJS_KEYS = [
-    "user_id",
-    "nickname",
-    "created_at",
-    "intro"
-]
+DJS_KEYS = ["user_id", "nickname", "created_at", "intro"]
 
 
 class Audio(Base):
@@ -119,7 +114,7 @@ def update_or_create_audio(session, audio_data):
             thumb=attributes["thumb"],
             is_free=attributes["is-free"],
         )
-        created = True 
+        created = True
         session.add(audio)
     else:
         audio.likes_count = attributes["likes-count"]

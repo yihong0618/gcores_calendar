@@ -22,7 +22,7 @@ def run():
         f.write(";\n")
         f.write("\n")
         f.write("const djs = ")
-        json.dump(djs_list, f,  indent=2)
+        json.dump(djs_list, f, indent=2)
         f.write(";\n")
         f.write("\n")
         f.write("export { activities, djs };\n")

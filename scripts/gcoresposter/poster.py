@@ -12,7 +12,6 @@ from xy import XY
 
 
 class Poster:
-
     def __init__(self):
         self.athlete = None
         self.title = None
@@ -80,7 +79,7 @@ class Poster:
         d.add(
             d.text(
                 self.athlete,
-                insert=(10, self.height-6),
+                insert=(10, self.height - 6),
                 fill=text_color,
                 style=value_style,
             )
@@ -88,7 +87,7 @@ class Poster:
         d.add(
             d.text(
                 "Audios" + f": {len(self.tracks)}",
-                insert=(143, self.height-6),
+                insert=(143, self.height - 6),
                 fill=text_color,
                 style=value_style,
             )
@@ -99,7 +98,9 @@ class Poster:
         total_likes = 0
         total_length_year_dict = defaultdict(int)
         for t in self.tracks:
-            date = datetime.datetime.strptime(t["created_at"].split(".")[0], "%Y-%m-%dT%H:%M:%S")
+            date = datetime.datetime.strptime(
+                t["created_at"].split(".")[0], "%Y-%m-%dT%H:%M:%S"
+            )
             year = date.year
             likes = t.get("likes_count", 0)
             total_likes += likes

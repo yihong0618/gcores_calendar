@@ -42,7 +42,7 @@ def get_avatar(thumb, djs_id, file_path):
         response = requests.get(url)
         if response.status_code == 200:
             # change all to png
-            with open(file_path + djs_id + ".png", 'wb') as f:
+            with open(file_path + djs_id + ".png", "wb") as f:
                 f.write(response.content)
         return True
     except:

@@ -4,7 +4,7 @@ import subprocess
 import time
 
 
-from .db import Audio, Djs, init_db, update_or_create_audio 
+from .db import Audio, Djs, init_db, update_or_create_audio
 from .api import get_audios_page_data, get_djs_data, get_avatar, get_single_audio_info
 from .config import LIMIT, IMG_DIR
 
@@ -12,7 +12,7 @@ from .config import LIMIT, IMG_DIR
 class Generator:
     def __init__(self, db_path, file_path):
         self.session = init_db(db_path)
-        self.djs_set = set() 
+        self.djs_set = set()
         self.file_path = file_path
 
     def get_audios_data(self, offset, limit=LIMIT, sort=False):
@@ -56,21 +56,20 @@ class Generator:
         # add djs
         self._add_djs()
 
-
     def load(self):
         audios = self.session.query(Audio).order_by(Audio.created_at)
 
         audios_list = []
         for audio in audios:
             audios_list.append(audio.to_dict())
-        
+
         djs = self.session.query(Djs).order_by(Djs.created_at)
         djs_list = []
         for d in djs:
             djs_list.append(d.to_dict())
 
         return audios_list, djs_list
-    
+
     def add_missing_djs_icon(self):
         djs_ids = self.session.query(Djs.user_id).all()
         djs_ids = set([str(i[0]) for i in djs_ids])
@@ -79,7 +78,7 @@ class Generator:
         missing_ids = djs_ids - set(dir_djs_ids)
         for d in missing_ids:
             self.get_thumb_and_download(d)
-    
+
     def add_missing_duration(self):
         missing_audios = list(self.session.query(Audio).filter_by(duration=0).all())
         print(len(missing_audios))
@@ -92,7 +91,11 @@ class Generator:
             except:
                 mp3_url = ""
 
-            p = subprocess.Popen(['node', 'scripts/get_duration.js', mp3_url], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen(
+                ["node", "scripts/get_duration.js", mp3_url],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
             out, err = p.communicate()
             try:
                 new_duration = int(out.decode())
@@ -103,15 +106,14 @@ class Generator:
             self.session.add(audio)
         self.session.commit()
 
-
     def get_thumb_and_download(self, djs_id):
         r = get_djs_data(djs_id)
         attributes = r["data"]["attributes"]
-        thumb = attributes["thumb"] 
+        thumb = attributes["thumb"]
         # download thumb
         get_avatar(thumb, djs_id, self.file_path)
         return attributes
-        
+
     def _add_djs(self):
         djs_ids = self.session.query(Djs.user_id).all()
         djs_ids = set([str(i[0]) for i in djs_ids])
@@ -120,19 +122,19 @@ class Generator:
             return
         for djs_id in new_djs_ids:
             attributes = self.get_attributes_and_download()
-            thumb = attributes["thumb"] 
+            thumb = attributes["thumb"]
 
             # download thumb
             get_avatar(thumb, djs_id, self.file_path)
-            
+
             djs = Djs(
-                user_id = djs_id,
-                nickname = attributes["nickname"],
-                created_at = attributes["created-at"],
-                thumb = thumb,
-                intro = attributes["intro"] or ""
+                user_id=djs_id,
+                nickname=attributes["nickname"],
+                created_at=attributes["created-at"],
+                thumb=thumb,
+                intro=attributes["intro"] or "",
             )
-            # ignore the djs already in database short fool solution 
+            # ignore the djs already in database short fool solution
             try:
                 self.session.add(djs)
                 self.session.commit()

@@ -1,6 +1,7 @@
 import sys
 from os import path
-sys.path.append(path.join(path.dirname(__file__), '..'))
+
+sys.path.append(path.join(path.dirname(__file__), ".."))
 import argparse
 import logging
 
@@ -17,9 +18,7 @@ SAVE_DIR = "assets/github.svg"
 def main():
     g = Generator(SQL_FILE, AVATAR_PATH)
     p = poster.Poster()
-    drawers = {
-        "github": github_drawer.GithubDrawer(p),
-    }
+    drawers = {"github": github_drawer.GithubDrawer(p)}
 
     args_parser = argparse.ArgumentParser()
     args_parser.add_argument(
