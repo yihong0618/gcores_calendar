@@ -250,7 +250,8 @@ const YearsStat = ({ audios, year, onClick }) => {
           机核第
           {yearsArr.length}
           年了，
-          走过的{yearsArr.length-1}
+          走过的
+          {yearsArr.length - 1}
           年不容易。祝机核越来越好，玩游戏的都是朋友。下面是
           {year}
           的电台数据
@@ -341,7 +342,9 @@ const RunMapButtons = ({ changeYear }) => {
     e.target.style.color = 'rgb(244, 67, 54)';
 
     const elements = document.getElementsByClassName(styles.button);
-    elements[index].style.color = '#0f99a1';
+    if (elementIndex !== index) {
+      elements[index].style.color = '#0f99a1';
+    }
     setIndex(elementIndex);
   };
   return (
@@ -393,6 +396,10 @@ const AudioTable = ({
       fDjsSort = getSortDjsByAttrReverse;
     }
     const fTableSort = sortFuncMap.get(attrName);
+    if (audioIndex !== -1) {
+      const el = document.getElementsByClassName(styles.audioRow);
+      el[audioIndex].style.color = 'rgb(70, 70, 70)';
+    }
     setActivity(audios.sort(fTableSort));
     setDjs(fDjsSort(filterAndSortAudios(activities, filterYear, year, fTableSort), audioAttrMap.get(attrName)));
   };
@@ -434,7 +441,7 @@ const AudioRow = ({
     e.target.parentElement.style.color = 'rgb(244, 67, 54)';
 
     const elements = document.getElementsByClassName(styles.audioRow);
-    if (audioIndex !== -1) {
+    if (audioIndex !== -1 && audioIndex !== elementIndex) {
       elements[audioIndex].style.color = 'rgb(70, 70, 70)';
     }
     setAudioIndex(elementIndex);

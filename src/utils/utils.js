@@ -63,7 +63,6 @@ function secondsToHms(d) {
   return `(${hDisplay}${mDisplay}${sDisplay})`;
 }
 
-// Utilities
 const intComma = (x) => x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
 // for scroll to the map
