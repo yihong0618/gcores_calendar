@@ -1,11 +1,15 @@
 # gcores_calendar V1.0
 gcores audios calendar
 
+## How to use
+See this [article(in Chinese)](https://www.gcores.com/articles/128605)
+
 ## Insatall
  - yarn install
  - yarn develop
 
 ## PR ARE WELCOME
+
 ## ISSUES ARE WELCOME
 
 ## THANKS
