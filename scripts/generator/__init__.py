@@ -121,7 +121,7 @@ class Generator:
         if not self.djs_set:
             return
         for djs_id in new_djs_ids:
-            attributes = self.get_attributes_and_download()
+            attributes = self.get_thumb_and_download()
             thumb = attributes["thumb"]
 
             # download thumb
