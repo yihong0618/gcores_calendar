@@ -23382,7 +23382,7 @@ const activities = [
     "desc": "\u665a\u4e0a\u98d9\u4e00\u5708\u554a\uff1f",
     "duration": 4080,
     "created_at": "2020-07-30T12:19:03.000+08:00",
-    "likes_count": 155,
+    "likes_count": 157,
     "bookmarks_count": 133,
     "comments_count": 247,
     "djs": [
@@ -23432,7 +23432,7 @@ const activities = [
     "desc": "\u6709\u58f0\u4e66\u300a\u730e\u9b54\u4eba \u5377\u4e00\uff1a\u767d\u72fc\u5d1b\u8d77\u300b\u7b2c\u4e8c\u7ae0",
     "duration": 4882,
     "created_at": "2020-08-03T15:57:30.000+08:00",
-    "likes_count": 34,
+    "likes_count": 35,
     "bookmarks_count": 16,
     "comments_count": 95,
     "djs": [
@@ -23447,9 +23447,9 @@ const activities = [
     "desc": "\u6709\u58f0\u4e66\u300a\u730e\u9b54\u4eba \u5377\u4e00\uff1a\u767d\u72fc\u5d1b\u8d77\u300b \u514d\u8d39\u8bd5\u542c\u96c6",
     "duration": 1177,
     "created_at": "2020-08-03T17:17:08.000+08:00",
-    "likes_count": 226,
+    "likes_count": 227,
     "bookmarks_count": 143,
-    "comments_count": 405,
+    "comments_count": 406,
     "djs": [
       "446806"
     ],
@@ -23462,7 +23462,7 @@ const activities = [
     "desc": "\u8389\u5a05\uff0c\u51cb\u96f6",
     "duration": 3736,
     "created_at": "2020-08-03T23:00:34.000+08:00",
-    "likes_count": 249,
+    "likes_count": 250,
     "bookmarks_count": 164,
     "comments_count": 244,
     "djs": [
@@ -23494,8 +23494,8 @@ const activities = [
     "duration": 4916,
     "created_at": "2020-08-05T07:02:35.000+08:00",
     "likes_count": 44,
-    "bookmarks_count": 25,
-    "comments_count": 189,
+    "bookmarks_count": 26,
+    "comments_count": 190,
     "djs": [
       "446806"
     ],
@@ -23508,7 +23508,7 @@ const activities = [
     "desc": "Rage your dream",
     "duration": 4809,
     "created_at": "2020-08-06T14:16:51.000+08:00",
-    "likes_count": 218,
+    "likes_count": 219,
     "bookmarks_count": 158,
     "comments_count": 305,
     "djs": [
@@ -23625,7 +23625,7 @@ const activities = [
     "created_at": "2020-08-11T15:12:07.000+08:00",
     "likes_count": 21,
     "bookmarks_count": 8,
-    "comments_count": 135,
+    "comments_count": 136,
     "djs": [
       "446806"
     ],
@@ -23639,7 +23639,7 @@ const activities = [
     "duration": 3157,
     "created_at": "2020-08-11T23:50:02.000+08:00",
     "likes_count": 214,
-    "bookmarks_count": 137,
+    "bookmarks_count": 138,
     "comments_count": 185,
     "djs": [
       "20803",
@@ -23655,9 +23655,9 @@ const activities = [
     "desc": "\u5feb\u52a0\u901f\uff01\u5feb\u5f00\u67aa\uff01",
     "duration": 4490,
     "created_at": "2020-08-12T23:47:33.000+08:00",
-    "likes_count": 501,
-    "bookmarks_count": 224,
-    "comments_count": 476,
+    "likes_count": 502,
+    "bookmarks_count": 223,
+    "comments_count": 477,
     "djs": [
       "48472",
       "24683",
@@ -23693,8 +23693,8 @@ const activities = [
     "duration": 5148,
     "created_at": "2020-08-16T23:16:31.000+08:00",
     "likes_count": 510,
-    "bookmarks_count": 242,
-    "comments_count": 632,
+    "bookmarks_count": 240,
+    "comments_count": 633,
     "djs": [
       "48472",
       "3",
@@ -23728,7 +23728,7 @@ const activities = [
     "created_at": "2020-08-17T13:25:23.000+08:00",
     "likes_count": 32,
     "bookmarks_count": 7,
-    "comments_count": 133,
+    "comments_count": 134,
     "djs": [
       "446806"
     ],
@@ -23741,7 +23741,7 @@ const activities = [
     "desc": "\u6709\u58f0\u4e66\u300a\u730e\u9b54\u4eba \u5377\u4e00\uff1a\u767d\u72fc\u5d1b\u8d77\u300b\u7b2c\u5341\u4e00\u7ae0",
     "duration": 878,
     "created_at": "2020-08-17T13:29:27.000+08:00",
-    "likes_count": 12,
+    "likes_count": 13,
     "bookmarks_count": 6,
     "comments_count": 14,
     "djs": [
@@ -23772,7 +23772,7 @@ const activities = [
     "duration": 277,
     "created_at": "2020-08-17T14:33:36.000+08:00",
     "likes_count": 62,
-    "bookmarks_count": 19,
+    "bookmarks_count": 20,
     "comments_count": 29,
     "djs": [
       "312520"
@@ -23876,7 +23876,7 @@ const activities = [
     "desc": "\u6b22\u8fce\u6536\u542c\u673a\u6838\u6709\u58f0\u6863\u6848\u4e4bSCP\u7cfb\u5217",
     "duration": 3578,
     "created_at": "2020-08-17T14:58:00.000+08:00",
-    "likes_count": 336,
+    "likes_count": 337,
     "bookmarks_count": 207,
     "comments_count": 434,
     "djs": [
@@ -23891,9 +23891,9 @@ const activities = [
     "desc": "\u6b22\u8fce\u6536\u542c\u673a\u6838\u6709\u58f0\u6863\u6848\u4e4bSCP\u7cfb\u5217",
     "duration": 937,
     "created_at": "2020-08-17T14:59:45.000+08:00",
-    "likes_count": 47,
-    "bookmarks_count": 13,
-    "comments_count": 33,
+    "likes_count": 48,
+    "bookmarks_count": 14,
+    "comments_count": 34,
     "djs": [
       "312520"
     ],
@@ -23921,7 +23921,7 @@ const activities = [
     "desc": "\u6b22\u8fce\u6536\u542c\u673a\u6838\u6709\u58f0\u6863\u6848\u4e4bSCP\u7cfb\u5217",
     "duration": 1899,
     "created_at": "2020-08-17T15:19:05.000+08:00",
-    "likes_count": 68,
+    "likes_count": 70,
     "bookmarks_count": 16,
     "comments_count": 130,
     "djs": [
@@ -23953,7 +23953,7 @@ const activities = [
     "desc": "\u4e0d\u8d1f\u5723\u5409\u5217\u65af\u4e4b\u8840",
     "duration": 4731,
     "created_at": "2020-08-19T23:23:47.000+08:00",
-    "likes_count": 276,
+    "likes_count": 277,
     "bookmarks_count": 172,
     "comments_count": 255,
     "djs": [
@@ -24022,9 +24022,9 @@ const activities = [
     "desc": "\u8fd9\u4e5f\u884c\uff1f",
     "duration": 3957,
     "created_at": "2020-08-25T23:55:21.000+08:00",
-    "likes_count": 480,
+    "likes_count": 481,
     "bookmarks_count": 250,
-    "comments_count": 773,
+    "comments_count": 774,
     "djs": [
       "3",
       "24683",
@@ -24041,8 +24041,8 @@ const activities = [
     "desc": "\u751f\u4e0e\u6b7b\u3001\u7f8e\u4e3d\u4e0e\u4e11\u964b\uff0c\u65e5\u5e38\u4e0e\u5f02\u5f62\uff0c\u4f60\u7684\u8111\u6d77\u4e2d\u6d8c\u73b0\u7684\u662f\u600e\u6837\u7684\u753b\u9762\uff1f",
     "duration": 4277,
     "created_at": "2020-08-27T23:57:27.000+08:00",
-    "likes_count": 368,
-    "bookmarks_count": 421,
+    "likes_count": 370,
+    "bookmarks_count": 423,
     "comments_count": 440,
     "djs": [
       "28214",
@@ -24078,7 +24078,7 @@ const activities = [
     "duration": 5423,
     "created_at": "2020-08-29T23:54:47.000+08:00",
     "likes_count": 171,
-    "bookmarks_count": 77,
+    "bookmarks_count": 76,
     "comments_count": 210,
     "djs": [
       "21327",
@@ -24096,9 +24096,9 @@ const activities = [
     "desc": "\u4f60\u53ef\u60f3\u597d\u4e86",
     "duration": 4819,
     "created_at": "2020-08-30T23:57:36.000+08:00",
-    "likes_count": 491,
+    "likes_count": 492,
     "bookmarks_count": 233,
-    "comments_count": 649,
+    "comments_count": 650,
     "djs": [
       "48472",
       "21327",
@@ -24115,9 +24115,9 @@ const activities = [
     "desc": "\u548c\u9b54\u5b99\u7684\u731b\u54e5\u4e0e\u795e\u79d8\u54e5\u7545\u804a\u7075\u5f02\u4e8b\u4ef6",
     "duration": 6418,
     "created_at": "2020-09-01T23:43:58.000+08:00",
-    "likes_count": 661,
-    "bookmarks_count": 543,
-    "comments_count": 1181,
+    "likes_count": 663,
+    "bookmarks_count": 544,
+    "comments_count": 1182,
     "djs": [
       "3",
       "468676",
@@ -24133,7 +24133,7 @@ const activities = [
     "duration": 4063,
     "created_at": "2020-09-03T23:59:12.000+08:00",
     "likes_count": 179,
-    "bookmarks_count": 121,
+    "bookmarks_count": 122,
     "comments_count": 170,
     "djs": [
       "19879",
@@ -24151,7 +24151,7 @@ const activities = [
     "created_at": "2020-09-04T14:56:13.000+08:00",
     "likes_count": 166,
     "bookmarks_count": 79,
-    "comments_count": 435,
+    "comments_count": 437,
     "djs": [
       "13701",
       "28214",
@@ -24186,9 +24186,9 @@ const activities = [
     "desc": "\u53ef\u66fe\u8bb0\u5f97\u7231",
     "duration": 3948,
     "created_at": "2020-09-07T00:00:19.000+08:00",
-    "likes_count": 554,
+    "likes_count": 555,
     "bookmarks_count": 211,
-    "comments_count": 1179,
+    "comments_count": 1180,
     "djs": [
       "13701",
       "24683",
@@ -24205,9 +24205,9 @@ const activities = [
     "desc": "\u5267\u900f\u9884\u8b66\uff01\u300a\u4fe1\u6761\u300b\u4e09\u65b9\u4f4d\u89e3\u6790",
     "duration": 5993,
     "created_at": "2020-09-08T00:00:10.000+08:00",
-    "likes_count": 350,
+    "likes_count": 351,
     "bookmarks_count": 418,
-    "comments_count": 884,
+    "comments_count": 885,
     "djs": [
       "264409",
       "19879",
@@ -24225,7 +24225,7 @@ const activities = [
     "created_at": "2020-09-11T23:31:52.000+08:00",
     "likes_count": 228,
     "bookmarks_count": 90,
-    "comments_count": 485,
+    "comments_count": 486,
     "djs": [
       "34524",
       "13701",
@@ -24243,7 +24243,7 @@ const activities = [
     "created_at": "2020-09-12T16:45:51.000+08:00",
     "likes_count": 41,
     "bookmarks_count": 17,
-    "comments_count": 86,
+    "comments_count": 87,
     "djs": [
       "446806"
     ],
@@ -24257,8 +24257,8 @@ const activities = [
     "duration": 10994,
     "created_at": "2020-09-12T16:55:20.000+08:00",
     "likes_count": 44,
-    "bookmarks_count": 17,
-    "comments_count": 96,
+    "bookmarks_count": 19,
+    "comments_count": 97,
     "djs": [
       "446806"
     ],
@@ -24272,8 +24272,8 @@ const activities = [
     "duration": 4330,
     "created_at": "2020-09-12T23:48:26.000+08:00",
     "likes_count": 191,
-    "bookmarks_count": 72,
-    "comments_count": 185,
+    "bookmarks_count": 75,
+    "comments_count": 186,
     "djs": [
       "13701",
       "365",
@@ -24289,8 +24289,8 @@ const activities = [
     "desc": "\u201c\u670b\u53cb\u4eec\uff01\u4f60\u662f\u5426\u4e3a\u8fd9\u79cd\u4e8b\u60c5\u6240\u56f0\u6270...\u201d",
     "duration": 5069,
     "created_at": "2020-09-13T23:54:09.000+08:00",
-    "likes_count": 279,
-    "bookmarks_count": 181,
+    "likes_count": 281,
+    "bookmarks_count": 182,
     "comments_count": 320,
     "djs": [
       "48472",
@@ -24306,9 +24306,9 @@ const activities = [
     "desc": "\u6765\u70b9\u771f\u6709\u201c\u9b3c\u201d\u7684",
     "duration": 4228,
     "created_at": "2020-09-14T23:58:29.000+08:00",
-    "likes_count": 420,
-    "bookmarks_count": 387,
-    "comments_count": 484,
+    "likes_count": 423,
+    "bookmarks_count": 392,
+    "comments_count": 486,
     "djs": [
       "21327",
       "3",
@@ -24325,7 +24325,7 @@ const activities = [
     "created_at": "2020-09-16T23:55:40.000+08:00",
     "likes_count": 189,
     "bookmarks_count": 90,
-    "comments_count": 194,
+    "comments_count": 195,
     "djs": [
       "13701",
       "3",
@@ -24340,8 +24340,8 @@ const activities = [
     "desc": "\u4e0e\u672a\u6765\u4e8b\u52a1\u7ba1\u7406\u5c40\u7684\u7279\u5de5\u4e00\u540c\u7545\u804a~",
     "duration": 3451,
     "created_at": "2020-09-17T23:56:21.000+08:00",
-    "likes_count": 205,
-    "bookmarks_count": 264,
+    "likes_count": 207,
+    "bookmarks_count": 270,
     "comments_count": 252,
     "djs": [
       "12865",
@@ -24358,8 +24358,8 @@ const activities = [
     "duration": 5937,
     "created_at": "2020-09-18T16:01:35.000+08:00",
     "likes_count": 20,
-    "bookmarks_count": 5,
-    "comments_count": 54,
+    "bookmarks_count": 6,
+    "comments_count": 55,
     "djs": [
       "446806"
     ],
@@ -24372,9 +24372,9 @@ const activities = [
     "desc": "\u6709\u58f0\u4e66\u300a\u730e\u9b54\u4eba \u5377\u4e8c\uff1a\u547d\u8fd0\u4e4b\u5251\u300b\u7b2c\u4e09\u7ae0",
     "duration": 6869,
     "created_at": "2020-09-18T16:11:31.000+08:00",
-    "likes_count": 19,
+    "likes_count": 21,
     "bookmarks_count": 5,
-    "comments_count": 51,
+    "comments_count": 52,
     "djs": [
       "446806"
     ],
@@ -24387,9 +24387,9 @@ const activities = [
     "desc": "\u51c6\u5907\u597d\u4e86\u5417\uff1f",
     "duration": 5869,
     "created_at": "2020-09-20T00:01:10.000+08:00",
-    "likes_count": 223,
+    "likes_count": 224,
     "bookmarks_count": 78,
-    "comments_count": 445,
+    "comments_count": 446,
     "djs": [
       "13701",
       "21327",
@@ -24405,9 +24405,9 @@ const activities = [
     "desc": "\u4ece\u4e00\u4e2a\u7cdf\u7cd5\u7684\u5bfc\u6e38\u5e26\u6765\u7684\u9057\u61be\u5f00\u59cb",
     "duration": 4947,
     "created_at": "2020-09-21T23:58:12.000+08:00",
-    "likes_count": 328,
-    "bookmarks_count": 222,
-    "comments_count": 238,
+    "likes_count": 334,
+    "bookmarks_count": 227,
+    "comments_count": 241,
     "djs": [
       "21635",
       "20803",
@@ -24422,9 +24422,9 @@ const activities = [
     "desc": "\u6e38\u620f\u5f00\u53d1\u8005\u4eec\u53ef\u4ee5\u591a\u591a\u5173\u6ce8\uff01",
     "duration": 3052,
     "created_at": "2020-09-22T14:17:27.000+08:00",
-    "likes_count": 152,
-    "bookmarks_count": 84,
-    "comments_count": 490,
+    "likes_count": 153,
+    "bookmarks_count": 89,
+    "comments_count": 504,
     "djs": [
       "3",
       "473734",
@@ -24439,9 +24439,9 @@ const activities = [
     "desc": "\u5404\u4f4d\u90fd\u82b1\u4e86\u591a\u5c11\u94b1\u5728\u4e07\u4ee3\u7684\u4e1c\u897f\u4e0a\uff1f",
     "duration": 4758,
     "created_at": "2020-09-23T19:50:01.000+08:00",
-    "likes_count": 194,
-    "bookmarks_count": 147,
-    "comments_count": 272,
+    "likes_count": 199,
+    "bookmarks_count": 155,
+    "comments_count": 273,
     "djs": [
       "290589",
       "21635",
@@ -24456,9 +24456,9 @@ const activities = [
     "desc": "\u539f\u6765\u6709\u4eba\u5728\u5e55\u540e\u9ed8\u9ed8\u5730\u5b88\u62a4\u7740\u6211\u4eec",
     "duration": 6313,
     "created_at": "2020-09-24T23:59:46.000+08:00",
-    "likes_count": 289,
-    "bookmarks_count": 94,
-    "comments_count": 396,
+    "likes_count": 309,
+    "bookmarks_count": 104,
+    "comments_count": 413,
     "djs": [
       "3",
       "24683",
@@ -24475,9 +24475,9 @@ const activities = [
     "desc": "\u6709\u58f0\u4e66\u300a\u730e\u9b54\u4eba \u5377\u4e8c\uff1a\u547d\u8fd0\u4e4b\u5251\u300b\u7b2c\u56db\u7ae0",
     "duration": 7824,
     "created_at": "2020-09-26T07:53:21.000+08:00",
-    "likes_count": 3,
-    "bookmarks_count": 0,
-    "comments_count": 14,
+    "likes_count": 14,
+    "bookmarks_count": 3,
+    "comments_count": 47,
     "djs": [
       "446806"
     ],
@@ -24490,9 +24490,9 @@ const activities = [
     "desc": "\u4e70\u5b9a\u79bb\u624b",
     "duration": 4908,
     "created_at": "2020-09-27T00:02:12.000+08:00",
-    "likes_count": 74,
-    "bookmarks_count": 22,
-    "comments_count": 145,
+    "likes_count": 170,
+    "bookmarks_count": 59,
+    "comments_count": 393,
     "djs": [
       "3",
       "21635",
@@ -24500,6 +24500,24 @@ const activities = [
       "13701"
     ],
     "category_id": "45",
+    "is_free": true
+  },
+  {
+    "audio_id": 129190,
+    "title": "\u5206\u4eab\u51e0\u672c\u6700\u8fd1\u770b\u7684\u65b0\u4e66\uff0c\u6709\u5403\u6709\u559d\u6709\u76d6\u9762\uff0c\u6838\u5e02\u5947\u8c2dVol.21",
+    "desc": "\u5927\u5bb6\u4e45\u7b49\u4e86",
+    "duration": 3241,
+    "created_at": "2020-09-27T23:45:33.000+08:00",
+    "likes_count": 69,
+    "bookmarks_count": 24,
+    "comments_count": 86,
+    "djs": [
+      "12865",
+      "124832",
+      "15368",
+      "20803"
+    ],
+    "category_id": "62",
     "is_free": true
   }
 ];
