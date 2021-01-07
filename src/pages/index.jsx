@@ -347,13 +347,14 @@ const RunMapButtons = ({ changeYear }) => {
     }
     setIndex(elementIndex);
   };
+  let now = new Date()
   return (
     <div>
       <ul className={styles.buttons}>
         {yearsButtons.map((year) => (
           <li
             key={`${year}button`}
-            style={{ color: year === '2020' ? 'rgb(244, 67, 54)' : '#0f99a1' }}
+            style={{ color: year === now.getFullYear()+'' ? 'rgb(244, 67, 54)' : '#0f99a1' }}
             year={year}
             onClick={(e) => {
               changeYear(year);
