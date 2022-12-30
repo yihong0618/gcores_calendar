@@ -8,7 +8,7 @@ See this [article(in Chinese)](https://www.gcores.com/articles/128605)
  - yarn install
  - yarn develop
 
-## RUN local
+## Run local
 
 - python scripts/gen.py
 
