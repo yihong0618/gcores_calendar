@@ -44,7 +44,7 @@
     "clean": "gatsby clean"
   },
   "engines": {
-    "node": ">=14.15.0"
+    "node": "16.x"
   },
   "repository": {
     "type": "git",
