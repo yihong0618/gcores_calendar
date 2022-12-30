@@ -30,7 +30,7 @@ class Generator:
             offset += 100
 
             # for test
-            # if offset == 200:
+            # if offset == 400:
             #     break
             # spider rule
             time.sleep(1)
