@@ -8,6 +8,10 @@ See this [article(in Chinese)](https://www.gcores.com/articles/128605)
  - yarn install
  - yarn develop
 
+## RUN local
+
+- python scripts/gen.py
+
 ## PR ARE WELCOME
 
 ## ISSUES ARE WELCOME
