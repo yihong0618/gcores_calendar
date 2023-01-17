@@ -3,7 +3,7 @@ name: Sync Data
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 0 * *"
+    - cron: "0 0 * * *"
   push:
     branches:
       - master
@@ -21,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.6
+          python-version: 3.8
 
       - name: Configure pip cache
         uses: actions/cache@v1
