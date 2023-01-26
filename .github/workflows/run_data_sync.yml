@@ -52,8 +52,8 @@ jobs:
 
       - name: Push new audio
         run: |
-          git config --local user.email zouzou0208@gmail.com
-          git config --local user.name yihong0618
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           git commit -a -m 'update new audio' || echo "nothing to commit"
           git push || echo "nothing to push"
 
