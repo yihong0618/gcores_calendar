@@ -4,7 +4,7 @@ gcores audios calendar
 ## How to use
 See this [article(in Chinese)](https://www.gcores.com/articles/128605)
 
-## Insatall
+## Install
  - yarn install
  - yarn develop
 

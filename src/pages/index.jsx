@@ -16,7 +16,7 @@ import {
 import {
   audioAttrMap, audioRoot, djsRoot, lightPlaces, MAPBOX_TOKEN,
 } from '../utils/const';
-import styles from './gocres.module.scss';
+import styles from './gcores.module.scss';
 
 // const
 let yearsArr = [];
