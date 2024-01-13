@@ -54,6 +54,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -a -m 'update new audio' || echo "nothing to commit"
+          git add src/images
+          git commit -m 'update new audio' || echo "nothing to commit"
           git push || echo "nothing to push"
 

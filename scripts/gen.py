@@ -12,7 +12,7 @@ def run():
     g.sync(False)
     ############# if you want host by your own, un comment below two lines #################
     # g.add_missing_duration()
-    # g.add_missing_djs_icon()
+    g.add_missing_djs_icon()
 
     audios_list, djs_list = g.load()
     with open(JSON_FILE, "w") as f:
