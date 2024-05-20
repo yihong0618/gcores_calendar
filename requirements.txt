@@ -1,8 +1,8 @@
 requests
-gpxpy==1.4.2
-stravalib==0.10.2
-appdirs>=1.4.0
-svgwrite>=1.1.9
+gpxpy
+stravalib
+appdirs
+svgwrite
 colour
 s2sphere
 arrow
