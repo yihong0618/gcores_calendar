@@ -34,7 +34,6 @@ jobs:
 
       - name: Make svg GitHub profile
         run: |
-          source venv/bin/activate
           python scripts/gcoresposter/cli.py --special-likes 500 --special-likes2 1000 --special-color '#0f99a1' --special-color2 '#f44336'
 
       - name: Push new audio
